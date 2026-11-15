@@ -1,0 +1,281 @@
+/* 🎮 TEMA RETRO ARCADE GLOBAL PARA TODO EL SISTEMA POS */
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap');
+
+:root {
+  --retro-bg-dark: #090214;
+  --retro-card-bg: rgba(18, 7, 38, 0.95);
+  --retro-neon-cyan: #00ffcc;
+  --retro-neon-pink: #ff007f;
+  --retro-neon-yellow: #ffe600;
+  --retro-neon-green: #39ff14;
+  --retro-neon-purple: #9d4edd;
+  --retro-text-light: #f5f0ff;
+  --retro-border-glow: 0 0 10px rgba(0, 255, 204, 0.4), inset 0 0 10px rgba(255, 0, 127, 0.15);
+}
+
+/* Fondo global con sutil cuadrícula cibernética */
+body, .surface-ground, .layout-container {
+  background-color: var(--retro-bg-dark) !important;
+  background-image: 
+    linear-gradient(rgba(255, 0, 127, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 255, 204, 0.05) 1px, transparent 1px) !important;
+  background-size: 32px 32px !important;
+  color: var(--retro-text-light) !important;
+}
+
+/* Encabezados y títulos en pixel art */
+h1, h2, h3, .arcade-font-pixel {
+  font-family: 'Press Start 2P', monospace !important;
+  letter-spacing: 1px;
+}
+
+/* Tarjetas con estilo Gabinete Arcade */
+.surface-card, .p-card {
+  background: var(--retro-card-bg) !important;
+  border: 2px solid var(--retro-neon-cyan) !important;
+  box-shadow: var(--retro-border-glow) !important;
+  border-radius: 6px !important;
+  color: var(--retro-text-light) !important;
+}
+
+.p-card .p-card-title {
+  font-family: 'Press Start 2P', monospace !important;
+  font-size: 0.85rem !important;
+  color: var(--retro-neon-yellow) !important;
+  text-shadow: 2px 2px 0px var(--retro-neon-pink) !important;
+  letter-spacing: 1px !important;
+  margin-bottom: 1rem !important;
+}
+
+/* Barra superior de navegación estilo marquesina */
+.retro-topbar {
+  background: #110526 !important;
+  border-bottom: 3px solid var(--retro-neon-pink) !important;
+  box-shadow: 0 4px 18px rgba(255, 0, 127, 0.35) !important;
+}
+
+/* Botones arcade en todo el sistema */
+.p-button {
+  font-family: 'Press Start 2P', monospace !important;
+  font-size: 0.68rem !important;
+  border-radius: 4px !important;
+  letter-spacing: 1px !important;
+  transition: all 0.1s ease !important;
+}
+
+.p-button:not(.p-button-text):not(.p-button-outlined) {
+  background: linear-gradient(180deg, #ff007f 0%, #a60053 100%) !important;
+  border: 2px solid #ffe600 !important;
+  color: #ffe600 !important;
+  text-shadow: 1px 1px 0 #000 !important;
+  box-shadow: 0 4px 0 #520029, 0 6px 12px rgba(255, 0, 127, 0.4) !important;
+}
+
+.p-button:not(.p-button-text):not(.p-button-outlined):hover {
+  background: linear-gradient(180deg, #ff2491 0%, #c40062 100%) !important;
+  box-shadow: 0 4px 0 #520029, 0 8px 16px rgba(255, 0, 127, 0.6) !important;
+}
+
+.p-button:not(.p-button-text):not(.p-button-outlined):active {
+  transform: translateY(3px) !important;
+  box-shadow: 0 1px 0 #520029, 0 2px 6px rgba(255, 0, 127, 0.3) !important;
+}
+
+.p-button.p-button-outlined {
+  border: 2px solid var(--retro-neon-cyan) !important;
+  color: var(--retro-neon-cyan) !important;
+  background: rgba(0, 255, 204, 0.05) !important;
+}
+
+.p-button.p-button-outlined:hover {
+  background: rgba(0, 255, 204, 0.18) !important;
+  box-shadow: 0 0 10px rgba(0, 255, 204, 0.5) !important;
+}
+
+.p-button.p-button-text {
+  color: var(--retro-neon-cyan) !important;
+}
+
+.p-button.p-button-text:hover {
+  background: rgba(0, 255, 204, 0.12) !important;
+}
+
+/* Tablas DataTables estilo Cyber-Terminal */
+.p-datatable {
+  border: 2px solid rgba(0, 255, 204, 0.3) !important;
+  border-radius: 6px !important;
+  overflow: hidden !important;
+  box-shadow: 0 0 15px rgba(0, 255, 204, 0.15) !important;
+}
+
+.p-datatable .p-datatable-header {
+  background: #14062f !important;
+  border-bottom: 2px solid var(--retro-neon-pink) !important;
+  padding: 1rem !important;
+}
+
+.p-datatable .p-datatable-thead > tr > th {
+  background: #19073b !important;
+  color: var(--retro-neon-cyan) !important;
+  font-family: 'Press Start 2P', monospace !important;
+  font-size: 0.65rem !important;
+  text-transform: uppercase !important;
+  border-bottom: 2px solid rgba(0, 255, 204, 0.4) !important;
+  padding: 0.85rem !important;
+  letter-spacing: 1px !important;
+}
+
+.p-datatable .p-datatable-tbody > tr {
+  background: #0f0422 !important;
+  color: #efe8ff !important;
+  font-family: 'VT323', monospace !important;
+  font-size: 1.35rem !important;
+  border-bottom: 1px solid rgba(157, 78, 221, 0.25) !important;
+  transition: background 0.15s ease !important;
+}
+
+.p-datatable .p-datatable-tbody > tr:nth-child(even) {
+  background: #13052b !important;
+}
+
+.p-datatable .p-datatable-tbody > tr:hover {
+  background: rgba(255, 0, 127, 0.18) !important;
+  color: #ffffff !important;
+}
+
+/* Paginador retro */
+.p-paginator {
+  background: #13052b !important;
+  border-top: 2px solid rgba(0, 255, 204, 0.3) !important;
+  font-family: 'VT323', monospace !important;
+  font-size: 1.25rem !important;
+  color: #00ffcc !important;
+}
+
+.p-paginator .p-paginator-page.p-highlight {
+  background: var(--retro-neon-pink) !important;
+  color: #fff !important;
+  border: 1px solid var(--retro-neon-yellow) !important;
+}
+
+/* Inputs de texto estilo Terminal */
+.p-inputtext {
+  background: #0a0316 !important;
+  border: 2px solid rgba(0, 255, 204, 0.5) !important;
+  color: var(--retro-neon-cyan) !important;
+  font-family: 'VT323', monospace !important;
+  font-size: 1.3rem !important;
+  border-radius: 4px !important;
+  box-shadow: inset 0 0 6px rgba(0, 255, 204, 0.2) !important;
+}
+
+.p-inputtext:focus {
+  border-color: var(--retro-neon-pink) !important;
+  box-shadow: 0 0 10px rgba(255, 0, 127, 0.5), inset 0 0 6px rgba(255, 0, 127, 0.2) !important;
+  color: var(--retro-neon-yellow) !important;
+}
+
+/* Barras de progreso estilo Barra de Vida / HP */
+.p-progressbar {
+  background: #060110 !important;
+  border: 2px solid var(--retro-neon-pink) !important;
+  border-radius: 4px !important;
+  box-shadow: 0 0 8px rgba(255, 0, 127, 0.3) !important;
+}
+
+.p-progressbar .p-progressbar-value {
+  background: repeating-linear-gradient(
+    45deg,
+    #00ffcc,
+    #00ffcc 10px,
+    #00d4aa 10px,
+    #00d4aa 20px
+  ) !important;
+  box-shadow: 0 0 12px rgba(0, 255, 204, 0.6) !important;
+}
+
+/* Etiquetas Tag estilo Arcade */
+.p-tag {
+  font-family: 'Press Start 2P', monospace !important;
+  font-size: 0.55rem !important;
+  padding: 0.35rem 0.6rem !important;
+  border-radius: 3px !important;
+  letter-spacing: 1px !important;
+  border: 1px solid currentColor !important;
+}
+
+.p-tag-success {
+  background: rgba(57, 255, 20, 0.15) !important;
+  color: #39ff14 !important;
+  border-color: #39ff14 !important;
+  box-shadow: 0 0 6px rgba(57, 255, 20, 0.4) !important;
+}
+
+.p-tag-warning {
+  background: rgba(255, 230, 0, 0.15) !important;
+  color: #ffe600 !important;
+  border-color: #ffe600 !important;
+  box-shadow: 0 0 6px rgba(255, 230, 0, 0.4) !important;
+}
+
+.p-tag-danger {
+  background: rgba(255, 0, 127, 0.15) !important;
+  color: #ff007f !important;
+  border-color: #ff007f !important;
+  box-shadow: 0 0 6px rgba(255, 0, 127, 0.4) !important;
+}
+
+.p-tag-info {
+  background: rgba(0, 255, 204, 0.15) !important;
+  color: #00ffcc !important;
+  border-color: #00ffcc !important;
+  box-shadow: 0 0 6px rgba(0, 255, 204, 0.4) !important;
+}
+
+/* Ventanas Modales Diálogo */
+.p-dialog {
+  background: #110526 !important;
+  border: 3px solid var(--retro-neon-cyan) !important;
+  box-shadow: 0 0 30px rgba(0, 255, 204, 0.5), 0 0 0 4px #000 !important;
+  border-radius: 6px !important;
+}
+
+.p-dialog .p-dialog-header {
+  background: #180838 !important;
+  color: var(--retro-neon-yellow) !important;
+  border-bottom: 2px solid var(--retro-neon-pink) !important;
+  font-family: 'Press Start 2P', monospace !important;
+  font-size: 0.85rem !important;
+}
+
+.p-dialog .p-dialog-content {
+  background: #110526 !important;
+  color: #e6e0f8 !important;
+}
+
+.p-dialog .p-dialog-footer {
+  background: #180838 !important;
+  border-top: 1px solid rgba(0, 255, 204, 0.25) !important;
+}
+
+/* Menú lateral Sidebar Arcade */
+.p-sidebar {
+  background: #0e0420 !important;
+  border-right: 3px solid var(--retro-neon-pink) !important;
+  box-shadow: 0 0 25px rgba(255, 0, 127, 0.4) !important;
+}
+
+.p-sidebar .p-sidebar-header {
+  border-bottom: 2px dashed rgba(0, 255, 204, 0.4) !important;
+  padding-bottom: 1rem !important;
+}
+
+/* Indicador parpadeante HUD */
+.arcade-blink-text {
+  animation: arcadeTextBlink 1.2s infinite steps(2, start);
+}
+
+@keyframes arcadeTextBlink {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0.2; }
+}

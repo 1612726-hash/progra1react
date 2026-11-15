@@ -1,0 +1,256 @@
+/* 🎮 ESTILO RETRO VIDEOJUEGO / ARCADE PARA LOGIN */
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap');
+
+.retro-wrapper {
+  min-height: 100vh;
+  position: relative;
+  overflow: hidden;
+  background: radial-gradient(ellipse at 50% 20%, #2e0854 0%, #120327 50%, #060112 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  font-family: 'Press Start 2P', monospace;
+  color: #fff;
+}
+
+/* Rejilla Synthwave en perspectiva animada */
+.retro-grid-floor {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 45vh;
+  background-image: 
+    linear-gradient(rgba(255, 0, 128, 0.4) 2px, transparent 2px),
+    linear-gradient(90deg, rgba(0, 255, 255, 0.35) 2px, transparent 2px);
+  background-size: 50px 50px;
+  background-position: center bottom;
+  transform: perspective(300px) rotateX(65deg);
+  transform-origin: bottom center;
+  animation: retroGridMove 3s linear infinite;
+  mask-image: linear-gradient(to top, rgba(0,0,0,1) 10%, rgba(0,0,0,0) 90%);
+  -webkit-mask-image: linear-gradient(to top, rgba(0,0,0,1) 10%, rgba(0,0,0,0) 90%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+@keyframes retroGridMove {
+  0% { background-position-y: 0px; }
+  100% { background-position-y: 50px; }
+}
+
+/* Sol retro al fondo */
+.retro-sun {
+  position: absolute;
+  top: 12%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  background: linear-gradient(to top, #ffe600, #ff007f);
+  box-shadow: 0 0 50px rgba(255, 0, 128, 0.6), 0 0 100px rgba(255, 230, 0, 0.3);
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.85;
+}
+
+/* Efecto CRT Scanlines */
+.retro-scanlines {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 20;
+  background: linear-gradient(
+    rgba(18, 16, 16, 0) 50%, 
+    rgba(0, 0, 0, 0.35) 50%
+  ),
+  linear-gradient(
+    90deg,
+    rgba(255, 0, 0, 0.04),
+    rgba(0, 255, 0, 0.02),
+    rgba(0, 0, 255, 0.04)
+  );
+  background-size: 100% 4px, 6px 100%;
+  opacity: 0.75;
+}
+
+/* Gabinete Arcade / Marco Principal */
+.arcade-box {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  max-width: 480px;
+  background: rgba(14, 6, 31, 0.92);
+  border: 4px solid #00ffcc;
+  box-shadow: 
+    0 0 0 4px #000,
+    0 0 0 8px #ff007f,
+    0 0 30px rgba(0, 255, 204, 0.5),
+    inset 0 0 30px rgba(255, 0, 127, 0.2);
+  border-radius: 8px;
+  padding: 1.75rem 2rem;
+  backdrop-filter: blur(8px);
+}
+
+/* Título con sombra cromática retro */
+.arcade-title {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 1.5rem;
+  text-transform: uppercase;
+  color: #ffe600;
+  text-shadow: 
+    3px 3px 0px #ff007f,
+    -2px -2px 0px #00ffcc,
+    0 0 15px rgba(255, 230, 0, 0.8);
+  letter-spacing: 2px;
+  margin: 0;
+}
+
+.arcade-subtitle {
+  font-family: 'VT323', monospace;
+  font-size: 1.35rem;
+  color: #00ffcc;
+  letter-spacing: 3px;
+  margin-top: 0.25rem;
+  text-shadow: 0 0 8px rgba(0, 255, 204, 0.7);
+}
+
+/* Parpadeo clásico "INSERT COIN" / "PRESS START" */
+.retro-blink {
+  animation: retroBlink 1s infinite steps(2, start);
+}
+
+@keyframes retroBlink {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+
+/* Barra de HUD superior (SCORE, LEVEL, CREDITS) */
+.arcade-hud {
+  display: flex;
+  justify-content: space-between;
+  font-family: 'VT323', monospace;
+  font-size: 1.15rem;
+  color: #ff007f;
+  border-bottom: 2px dashed rgba(255, 0, 128, 0.4);
+  padding-bottom: 0.5rem;
+  margin-bottom: 1.25rem;
+  text-shadow: 0 0 6px rgba(255, 0, 128, 0.7);
+}
+
+.arcade-hud-item span {
+  color: #ffe600;
+}
+
+/* Inputs con estilo Terminal Arcade */
+.arcade-input-group {
+  margin-bottom: 1.25rem;
+}
+
+.arcade-label {
+  display: block;
+  font-family: 'VT323', monospace;
+  font-size: 1.3rem;
+  color: #00ffcc;
+  margin-bottom: 0.35rem;
+  letter-spacing: 1px;
+  text-shadow: 0 0 5px rgba(0, 255, 204, 0.5);
+}
+
+.arcade-input {
+  width: 100%;
+  background: #090314 !important;
+  border: 2px solid #ff007f !important;
+  color: #00ffcc !important;
+  font-family: 'VT323', monospace !important;
+  font-size: 1.45rem !important;
+  letter-spacing: 2px !important;
+  padding: 0.6rem 0.8rem !important;
+  border-radius: 4px !important;
+  outline: none !important;
+  box-shadow: inset 0 0 10px rgba(255, 0, 127, 0.3), 0 0 10px rgba(255, 0, 127, 0.2) !important;
+  transition: all 0.2s ease !important;
+}
+
+.arcade-input:focus {
+  border-color: #00ffcc !important;
+  box-shadow: inset 0 0 12px rgba(0, 255, 204, 0.4), 0 0 15px rgba(0, 255, 204, 0.6) !important;
+  color: #ffe600 !important;
+}
+
+/* Botón Arcade 3D "PUSH START" */
+.arcade-btn-start {
+  width: 100%;
+  font-family: 'Press Start 2P', monospace !important;
+  font-size: 0.9rem !important;
+  padding: 1.1rem 1rem !important;
+  background: linear-gradient(180deg, #ff007f 0%, #b8005b 100%) !important;
+  color: #ffe600 !important;
+  border: 3px solid #ffe600 !important;
+  border-radius: 6px !important;
+  cursor: pointer !important;
+  text-shadow: 2px 2px 0 #000 !important;
+  box-shadow: 
+    0 6px 0 #6e0036,
+    0 10px 20px rgba(255, 0, 127, 0.6) !important;
+  transform: translateY(0);
+  transition: all 0.1s ease !important;
+  margin-top: 0.5rem;
+  letter-spacing: 1px;
+}
+
+.arcade-btn-start:hover {
+  background: linear-gradient(180deg, #ff2692 0%, #cc0066 100%) !important;
+  box-shadow: 
+    0 6px 0 #6e0036,
+    0 12px 25px rgba(255, 0, 127, 0.8) !important;
+}
+
+.arcade-btn-start:active {
+  transform: translateY(6px) !important;
+  box-shadow: 
+    0 0 0 #6e0036,
+    0 4px 10px rgba(255, 0, 127, 0.4) !important;
+}
+
+/* Notificación / Insignia de contraseña ficticia estilo 8-bit */
+.arcade-badge-dummy {
+  background: rgba(0, 255, 204, 0.1);
+  border: 1px dashed #00ffcc;
+  padding: 0.5rem;
+  border-radius: 4px;
+  font-family: 'VT323', monospace;
+  font-size: 1.1rem;
+  color: #00ffcc;
+  margin-top: 0.6rem;
+  text-shadow: 0 0 5px rgba(0, 255, 204, 0.5);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Pie del Arcade */
+.arcade-footer {
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 2px solid rgba(0, 255, 204, 0.25);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: 'VT323', monospace;
+  font-size: 1.15rem;
+  color: #a89bc9;
+}
+
+/* Efecto de destello o chiptune */
+.pixel-heart {
+  color: #ff007f;
+  animation: pulseHeart 1.2s infinite;
+}
+
+@keyframes pulseHeart {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+}
