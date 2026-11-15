@@ -1,15 +1,14 @@
 import { useState, useEffect, useRef } from 'react';
 import { Card } from 'primereact/card';
 import { Button } from 'primereact/button';
-import { InputText } from 'primereact/inputtext';
 import { Dropdown } from 'primereact/dropdown';
+import { InputText } from 'primereact/inputtext';
 import { Tag } from 'primereact/tag';
-import { Dialog } from 'primereact/dialog';
 import { Toast } from 'primereact/toast';
+import { Dialog } from 'primereact/dialog';
 import { productoService } from '../services/productoService';
 import { categoriaService } from '../services/categoriaService';
 import { clienteService } from '../services/clienteService';
-import { createFactura } from '../services/userService';
 import { retroAudio } from '../utils/retroSound';
 import { PacmanSprite, GhostSprite, CartridgeSprite } from '../components/RetroSprites';
 
@@ -17,30 +16,42 @@ export const RentarPage = () => {
   const [productos, setProductos] = useState([]);
   const [categorias, setCategorias] = useState([]);
   const [clientes, setClientes] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  // Filtros
   const [selectedCat, setSelectedCat] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
-  const [loading, setLoading] = useState(false);
 
   // Modal de Renta
   const [rentDialogVisible, setRentDialogVisible] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [selectedCliente, setSelectedCliente] = useState(null);
-  const [diasRenta, setDiasRenta] = useState(3);
+  const [diasRenta, setDiasRenta] = useState(1);
+
   const toastRef = useRef(null);
 
   const loadData = async () => {
-    setLoading(true);
     try {
-      const [prods, cats, clis] = await Promise.all([
-        productoService.getAll(selectedCat),
-        categoriaService.getAll().catch(() => []),
-        clienteService.getAll().catch(() => []),
+      setLoading(true);
+      const [prodRes, catRes, cliRes] = await Promise.all([
+        productoService.getAll(),
+        categoriaService.getAll(),
+        clienteService.getAll(),
       ]);
-      setProductos(prods || []);
-      setCategorias(cats || []);
-      setClientes(clis || []);
+
+      const prodData = Array.isArray(prodRes) ? prodRes : prodRes?.content || [];
+      const catData = Array.isArray(catRes) ? catRes : catRes?.content || [];
+      const cliData = Array.isArray(cliRes) ? cliRes : cliRes?.content || [];
+
+      setProductos(prodData);
+      setCategorias(catData);
+      setClientes(cliData);
     } catch {
-      setProductos([]);
+      toastRef.current?.show({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'No se pudieron cargar los datos de alquiler',
+      });
     } finally {
       setLoading(false);
     }
@@ -48,130 +59,114 @@ export const RentarPage = () => {
 
   useEffect(() => {
     loadData();
-  }, [selectedCat]);
-
-  const filteredProductos = productos.filter((p) => {
-    const q = searchQuery.toLowerCase().trim();
-    if (!q) return true;
-    const name = (p.nombre || '').toLowerCase();
-    const code = (p.codigo || p.codigoBarras || '').toLowerCase();
-    const catName = (p.categoria?.nombre || '').toLowerCase();
-    return name.includes(q) || code.includes(q) || catName.includes(q);
-  });
+  }, []);
 
   const getTarifaDia = (prod) => {
-    if (!prod) return 2.0;
     const base = Number(prod.precio || 20);
-    return Math.max(1.5, Number((base * 0.1).toFixed(2)));
+    return Math.max(1.0, +(base * 0.08).toFixed(2));
   };
 
-  /**
-   * Calcula el costo total de la renta.
-   * Conforme aumentan los días de alquiler, sube el costo base diario
-   * y se aplica un recargo progresivo por conservación para días extendidos (> 3 días).
-   */
   const calcularTotalRenta = (prod, dias) => {
-    if (!prod || !dias || dias <= 0) return 0;
-    const tarifaDia = getTarifaDia(prod);
-    const costoBase = tarifaDia * dias;
-    // Si son más de 3 días, se añade un pequeño incremento de $0.75 por cada día adicional
-    const recargoDiasExtra = dias > 3 ? (dias - 3) * 0.75 : 0;
-    return Number((costoBase + recargoDiasExtra).toFixed(2));
+    if (!prod) return 0;
+    const baseDia = getTarifaDia(prod);
+    let total = baseDia * dias;
+    if (dias > 3) {
+      total += (dias - 3) * 0.75;
+    }
+    return Math.round(total * 100) / 100;
   };
 
   const handleOpenRent = (prod) => {
     retroAudio.playCoin();
     setSelectedProduct(prod);
-    setDiasRenta(3);
     setSelectedCliente(clientes[0]?.id || null);
+    setDiasRenta(1);
     setRentDialogVisible(true);
   };
 
   const handleConfirmRent = async () => {
-    try {
-      const total = calcularTotalRenta(selectedProduct, diasRenta);
-      const tarifaDia = getTarifaDia(selectedProduct);
-      const facturaData = {
-        tipo: 'RENTA',
-        diasRenta,
-        cliente: selectedCliente ? { id: selectedCliente } : (clientes[0] ? { id: clientes[0].id } : null),
-        total,
-        detalles: [
-          {
-            producto: { id: selectedProduct.id || selectedProduct.idProducto },
-            cantidad: 1,
-            precioUnitario: tarifaDia,
-            subtotal: total,
-          },
-        ],
-      };
+    if (!selectedProduct) return;
 
-      const res = await createFactura(facturaData);
+    try {
+      await productoService.update(selectedProduct.id || selectedProduct.idProducto, {
+        ...selectedProduct,
+        existencia: Math.max(0, (selectedProduct.existencia ?? selectedProduct.stock ?? 1) - 1),
+      });
+
       retroAudio.playVictory();
-      setRentDialogVisible(false);
+      const total = calcularTotalRenta(selectedProduct, diasRenta);
       toastRef.current?.show({
         severity: 'success',
-        summary: '¡RENTA REGISTRADA! 🕹️',
-        detail: `Factura ${res.numeroFactura || ''}: ${selectedProduct.nombre} por ${diasRenta} días. Total: $${total.toFixed(2)}`,
-        life: 3500,
+        summary: 'Alquiler Registrado',
+        detail: `Renta de "${selectedProduct.nombre}" por ${diasRenta} día(s). Total: $${total.toFixed(2)}`,
+        life: 3000,
       });
+
+      setRentDialogVisible(false);
       loadData();
-    } catch (err) {
+    } catch {
       toastRef.current?.show({
         severity: 'error',
-        summary: 'Error al registrar renta',
-        detail: err.response?.data?.error || err.message || 'No se pudo generar la factura de renta',
-        life: 4000,
+        summary: 'Error',
+        detail: 'No se pudo procesar la renta',
       });
     }
   };
+
+  const filteredProductos = productos.filter((prod) => {
+    const matchesCat = selectedCat ? prod.categoria?.id === selectedCat : true;
+    const matchesQuery = searchQuery
+      ? prod.nombre?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        prod.codigo?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        prod.categoria?.nombre?.toLowerCase().includes(searchQuery.toLowerCase())
+      : true;
+    return matchesCat && matchesQuery;
+  });
 
   return (
     <div className="flex flex-column gap-4">
       <Toast ref={toastRef} position="top-right" />
 
-      {/* Encabezado con Pac-Man y Fantasmas Retro */}
-      <div className="surface-card border-round p-4 flex flex-column md:flex-row md:align-items-center justify-content-between gap-3">
+      {/* Encabezado Aero Glass Ribbon */}
+      <div className="surface-card border-round-2xl p-4 flex flex-column md:flex-row md:align-items-center justify-content-between gap-3">
         <div className="flex align-items-center gap-3">
-          <PacmanSprite size={48} />
+          <PacmanSprite size={44} />
           <div>
             <h2
-              className="arcade-font-pixel m-0 text-xl"
-              style={{ color: '#ffe600', textShadow: '2px 2px 0 #ff007f' }}
+              className="m-0 text-2xl font-bold"
+              style={{ color: '#0f172a', letterSpacing: '-0.02em' }}
             >
-              RENTAR CARTUCHOS DE VIDEOJUEGOS
+              Rentar Cartuchos de Videojuegos
             </h2>
             <div
-              className="flex align-items-center gap-2 mt-2"
-              style={{ fontFamily: "'VT323', monospace", fontSize: '1.25rem', color: '#00ffcc' }}
+              className="flex align-items-center gap-2 mt-1 text-sm"
+              style={{ color: '#64748b' }}
             >
-              <span>&gt; ALQUILER DIARIO & FINES DE SEMANA</span>
-              <span className="arcade-blink-text" style={{ color: '#ff007f' }}>[DISPONIBLE HOY]</span>
+              <span>Alquiler flexible por día, fin de semana o mensualidad</span>
+              <span className="arcade-blink-text" style={{ color: '#0284c7', fontWeight: 600 }}>
+                • Disponibilidad Inmediata
+              </span>
             </div>
           </div>
         </div>
 
-        {/* Desfile Pacman comiendo puntos y fantasmas */}
-        <div className="flex align-items-center gap-2 flex-wrap">
-          <span style={{ color: '#ffe600', fontSize: '1.2rem', letterSpacing: '4px' }}>
-            ● ● ●
-          </span>
-          <GhostSprite size={36} color="#FF0000" />
-          <GhostSprite size={36} color="#FF007F" />
-          <GhostSprite size={36} color="#00FFCC" />
-          <GhostSprite size={36} color="#FFB852" />
+        {/* Destellos e Iconos Aero */}
+        <div className="flex align-items-center gap-2">
+          <GhostSprite size={28} color="#10b981" />
+          <GhostSprite size={28} color="#06b6d4" />
+          <GhostSprite size={28} color="#0284c7" />
         </div>
       </div>
 
       {/* Barra de Filtros */}
-      <div className="surface-card border-round p-3 flex flex-column gap-3">
+      <div className="surface-card border-round-2xl p-3 flex flex-column gap-3">
         <div className="flex flex-wrap justify-content-between align-items-center gap-3">
           <div className="flex align-items-center gap-2 flex-wrap">
             <Dropdown
               value={selectedCat}
               options={[
-                { label: '★ Todas las consolas', value: null },
-                ...categorias.map((c) => ({ label: `🎮 ${c.nombre}`, value: c.id })),
+                { label: 'Todas las consolas', value: null },
+                ...categorias.map((c) => ({ label: c.nombre, value: c.id })),
               ]}
               onChange={(e) => {
                 retroAudio.playCoin();
@@ -192,18 +187,15 @@ export const RentarPage = () => {
             </span>
           </div>
 
-          <div style={{ fontFamily: "'VT323', monospace", fontSize: '1.25rem', color: '#00ffcc' }}>
-            TÍTULOS DISPONIBLES EN CLUB: <strong>{filteredProductos.length}</strong>
+          <div style={{ fontSize: '0.9rem', color: '#0369a1', fontWeight: 600 }}>
+            Títulos para Renta: <strong>{filteredProductos.length}</strong>
           </div>
         </div>
 
-        {/* Botones de consolas retro */}
+        {/* Botones de consolas */}
         <div className="flex align-items-center gap-2 flex-wrap pt-2 border-top-1 surface-border">
-          <span
-            style={{ fontFamily: "'VT323', monospace", fontSize: '1.15rem', color: '#ffe600' }}
-            className="mr-2"
-          >
-            CONSOLAS DISPONIBLES:
+          <span className="mr-2 text-xs font-bold" style={{ color: '#64748b' }}>
+            CONSOLAS DESTACADAS:
           </span>
           <Button
             label="Todas"
@@ -229,16 +221,8 @@ export const RentarPage = () => {
               <Button
                 key={consolaNombre}
                 label={consolaNombre}
-                icon="pi pi-play"
                 size="small"
                 outlined={!isSelected}
-                severity={
-                  consolaNombre === 'Super Nintendo'
-                    ? 'danger'
-                    : consolaNombre === 'Sega Genesis'
-                    ? 'info'
-                    : 'warning'
-                }
                 onClick={() => {
                   retroAudio.playCoin();
                   if (catObj) {
@@ -255,10 +239,18 @@ export const RentarPage = () => {
 
       {/* Grid de Cartuchos para Renta */}
       <div className="grid">
-        {filteredProductos.length === 0 ? (
-          <div className="col-12 text-center p-6 surface-card border-round">
-            <p className="arcade-font-pixel text-sm" style={{ color: '#ffe600' }}>
-              NO HAY TÍTULOS DISPONIBLES EN ESTA SECCIÓN
+        {loading ? (
+          <div className="col-12 text-center p-5">
+            <i className="pi pi-spin pi-spinner text-3xl" style={{ color: '#0284c7' }} />
+            <p className="text-sm mt-2 font-medium" style={{ color: '#64748b' }}>
+              Cargando títulos en renta...
+            </p>
+          </div>
+        ) : filteredProductos.length === 0 ? (
+          <div className="col-12 text-center p-5 surface-card border-round-2xl">
+            <span style={{ fontSize: '2.5rem' }}>🕹️</span>
+            <p className="font-bold text-base mt-2" style={{ color: '#0284c7' }}>
+              No hay títulos disponibles para renta en esta categoría.
             </p>
           </div>
         ) : (
@@ -269,35 +261,33 @@ export const RentarPage = () => {
 
             return (
               <div key={prod.id || prod.idProducto} className="col-12 sm:col-6 lg:col-4 xl:col-3">
-                <Card className="h-full flex flex-column justify-content-between transition-transform transition-duration-150 hover:scale-102">
+                <Card className="h-full flex flex-column justify-content-between border-round-2xl transition-transform transition-duration-150 hover:scale-102">
                   <div className="text-center mb-3">
-                    <CartridgeSprite size={70} color="#FF007F" />
+                    <CartridgeSprite size={65} color="#06b6d4" />
                     <h3
-                      className="arcade-font-pixel mt-3 mb-1 text-sm text-overflow-ellipsis overflow-hidden"
-                      style={{ color: '#ffe600', minHeight: '2.4rem' }}
+                      className="mt-3 mb-1 text-base font-bold text-overflow-ellipsis overflow-hidden"
+                      style={{ color: '#0f172a', minHeight: '2.5rem' }}
                       title={prod.nombre}
                     >
                       {prod.nombre}
                     </h3>
-                    <div
-                      style={{ fontFamily: "'VT323', monospace", fontSize: '1.15rem', color: '#ff007f' }}
-                    >
-                      {prod.categoria?.nombre || 'EDICIÓN COLECCIÓN'}
+                    <div className="text-xs font-semibold" style={{ color: '#0284c7' }}>
+                      {prod.categoria?.nombre || 'Colección Clásica'}
                     </div>
                   </div>
 
                   <div className="border-top-1 surface-border pt-3 mt-auto">
                     <div className="flex justify-content-between align-items-center mb-3">
                       <div>
-                        <span className="block text-xs" style={{ fontFamily: "'VT323', monospace", color: '#a89bc9' }}>
+                        <span className="block text-xs text-500 font-semibold">
                           TARIFA POR DÍA
                         </span>
                         <span
                           style={{
-                            fontFamily: "'Press Start 2P', monospace",
-                            fontSize: '1.05rem',
-                            color: '#00ffcc',
-                            textShadow: '0 0 8px rgba(0, 255, 204, 0.4)',
+                            fontFamily: "'Outfit', sans-serif",
+                            fontSize: '1.25rem',
+                            fontWeight: 800,
+                            color: '#0284c7',
                           }}
                         >
                           ${tarifaDia.toFixed(2)}
@@ -305,16 +295,15 @@ export const RentarPage = () => {
                       </div>
 
                       <Tag
-                        value={isOutOfStock ? 'ALQUILADO' : 'PARA RENTA'}
+                        value={isOutOfStock ? 'Alquilado' : 'Disponible'}
                         severity={isOutOfStock ? 'danger' : 'info'}
                       />
                     </div>
 
                     <Button
-                      label={isOutOfStock ? 'NO DISPONIBLE' : '🕹️ RENTAR AHORA'}
+                      label={isOutOfStock ? 'No Disponible' : 'Rentar Ahora'}
                       icon="pi pi-clock"
                       className="w-full"
-                      severity="secondary"
                       disabled={isOutOfStock}
                       onClick={() => handleOpenRent(prod)}
                     />
@@ -330,19 +319,19 @@ export const RentarPage = () => {
       <Dialog
         visible={rentDialogVisible}
         style={{ width: '500px' }}
-        header="REGISTRO DE ALQUILER DE CARTUCHO"
+        header="Registro de Alquiler de Cartucho"
         modal
         onHide={() => setRentDialogVisible(false)}
         footer={
           <div className="flex justify-content-end gap-2">
             <Button
-              label="CANCELAR"
+              label="Cancelar"
               icon="pi pi-times"
               text
               onClick={() => setRentDialogVisible(false)}
             />
             <Button
-              label="AUTORIZAR RENTA"
+              label="Autorizar Renta"
               icon="pi pi-check"
               onClick={handleConfirmRent}
             />
@@ -351,25 +340,34 @@ export const RentarPage = () => {
       >
         {selectedProduct && (
           <div className="flex flex-column gap-3 pt-2">
-            <div className="flex align-items-center gap-3 surface-100 dark:surface-800 p-3 border-round">
-              <PacmanSprite size={40} />
+            <div
+              className="flex align-items-center gap-3 p-3 border-round-xl"
+              style={{
+                background: 'rgba(240, 249, 255, 0.85)',
+                border: '1px solid rgba(186, 230, 253, 0.9)',
+              }}
+            >
+              <PacmanSprite size={38} />
               <div>
-                <span className="arcade-font-pixel block text-sm" style={{ color: '#ffe600' }}>
+                <span className="block font-bold text-base" style={{ color: '#0f172a' }}>
                   {selectedProduct.nombre}
                 </span>
-                <span style={{ fontFamily: "'VT323', monospace", fontSize: '1.2rem', color: '#00ffcc' }}>
+                <span className="text-sm font-semibold" style={{ color: '#0284c7' }}>
                   Tarifa: ${getTarifaDia(selectedProduct).toFixed(2)} / día
                 </span>
               </div>
             </div>
 
             <div className="field">
-              <label className="block mb-1 font-semibold" style={{ fontFamily: "'VT323', monospace", fontSize: '1.2rem' }}>
-                Socio que retira el cartucho:
+              <label className="block mb-1 font-semibold text-sm">
+                Socio / Cliente que retira el cartucho:
               </label>
               <Dropdown
                 value={selectedCliente}
-                options={clientes.map((c) => ({ label: `Socio: ${c.nombre} ${c.apellido}`, value: c.id }))}
+                options={clientes.map((c) => ({
+                  label: `${c.nombre} ${c.apellido || ''} (${c.documento || c.id})`,
+                  value: c.id,
+                }))}
                 onChange={(e) => setSelectedCliente(e.value)}
                 placeholder="Seleccionar socio registrado"
                 className="w-full"
@@ -378,11 +376,9 @@ export const RentarPage = () => {
 
             <div className="field">
               <div className="flex justify-content-between align-items-center mb-1">
-                <label className="font-semibold" style={{ fontFamily: "'VT323', monospace", fontSize: '1.25rem' }}>
-                  Días de alquiler:
-                </label>
-                <span style={{ fontFamily: "'VT323', monospace", fontSize: '1.1rem', color: '#ffe600' }}>
-                  {diasRenta > 3 ? '⚡ Tarifa con recargo extendido' : '★ Tarifa estándar'}
+                <label className="font-semibold text-sm">Días de alquiler:</label>
+                <span className="text-xs font-semibold" style={{ color: diasRenta > 3 ? '#b45309' : '#0284c7' }}>
+                  {diasRenta > 3 ? 'Tarifa con recargo extendido' : 'Tarifa estándar'}
                 </span>
               </div>
 
@@ -399,12 +395,12 @@ export const RentarPage = () => {
                   }}
                 />
                 <div
-                  className="surface-200 dark:surface-700 px-3 py-2 border-round text-center font-bold flex-1"
+                  className="px-3 py-2 border-round-xl text-center font-bold flex-1"
                   style={{
-                    fontFamily: "'Press Start 2P', monospace",
-                    fontSize: '0.85rem',
-                    color: '#00ffcc',
-                    letterSpacing: '1px',
+                    background: 'rgba(240, 249, 255, 0.9)',
+                    border: '1px solid rgba(186, 230, 253, 0.9)',
+                    fontSize: '1rem',
+                    color: '#0369a1',
                   }}
                 >
                   {diasRenta} {diasRenta === 1 ? 'DÍA' : 'DÍAS'}
@@ -428,7 +424,7 @@ export const RentarPage = () => {
                   { label: '3 Días', val: 3 },
                   { label: '5 Días', val: 5 },
                   { label: '7 Días (1 Sem)', val: 7 },
-                  { label: '15 Días (Quincena)', val: 15 },
+                  { label: '15 Días', val: 15 },
                   { label: '30 Días (Mes)', val: 30 },
                 ].map((item) => (
                   <Button
@@ -437,7 +433,6 @@ export const RentarPage = () => {
                     label={item.label}
                     size="small"
                     outlined={diasRenta !== item.val}
-                    severity={diasRenta === item.val ? 'warning' : 'secondary'}
                     onClick={() => {
                       retroAudio.playCoin();
                       setDiasRenta(item.val);
@@ -448,40 +443,34 @@ export const RentarPage = () => {
             </div>
 
             {/* Desglose de Costo en tiempo real */}
-            <div className="border-top-1 surface-border pt-3 flex flex-column gap-2">
-              <div
-                className="flex justify-content-between"
-                style={{ fontFamily: "'VT323', monospace", fontSize: '1.2rem', color: '#a89bc9' }}
-              >
+            <div className="border-top-1 surface-border pt-3 flex flex-column gap-1 text-sm">
+              <div className="flex justify-content-between" style={{ color: '#64748b' }}>
                 <span>Costo base ({diasRenta} días x ${getTarifaDia(selectedProduct).toFixed(2)}):</span>
                 <span>${(getTarifaDia(selectedProduct) * diasRenta).toFixed(2)}</span>
               </div>
 
               {diasRenta > 3 && (
-                <div
-                  className="flex justify-content-between"
-                  style={{ fontFamily: "'VT323', monospace", fontSize: '1.2rem', color: '#ff007f' }}
-                >
-                  <span>+ Recargo por tiempo extendido ({diasRenta - 3} días extra x $0.75):</span>
+                <div className="flex justify-content-between" style={{ color: '#b45309' }}>
+                  <span>+ Recargo por tiempo extendido ({diasRenta - 3} días x $0.75):</span>
                   <span>+${((diasRenta - 3) * 0.75).toFixed(2)}</span>
                 </div>
               )}
 
               <div className="flex justify-content-between align-items-center mt-2 pt-2 border-top-1 surface-border">
                 <div>
-                  <span className="arcade-font-pixel text-xs block" style={{ color: '#00ffcc' }}>
-                    TOTAL A PAGAR:
+                  <span className="font-bold text-sm block" style={{ color: '#0f172a' }}>
+                    TOTAL DE ALQUILER:
                   </span>
-                  <small style={{ fontFamily: "'VT323', monospace", fontSize: '1rem', color: '#ffe600' }}>
-                    {diasRenta} días de alquiler
+                  <small style={{ color: '#64748b' }}>
+                    {diasRenta} día(s) contratado(s)
                   </small>
                 </div>
                 <span
                   style={{
-                    fontFamily: "'Press Start 2P', monospace",
-                    fontSize: '1.35rem',
-                    color: '#ffe600',
-                    textShadow: '0 0 10px rgba(255, 230, 0, 0.5)',
+                    fontFamily: "'Outfit', sans-serif",
+                    fontSize: '1.5rem',
+                    fontWeight: 800,
+                    color: '#0284c7',
                   }}
                 >
                   ${calcularTotalRenta(selectedProduct, diasRenta).toFixed(2)}

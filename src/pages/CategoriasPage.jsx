@@ -106,22 +106,22 @@ export const CategoriasPage = () => {
     <div className="flex justify-content-between align-items-center gap-3 flex-wrap">
       <div className="flex align-items-center gap-2">
         <span style={{ fontSize: '1.3rem' }}>🏷️</span>
-        <span className="arcade-font-pixel text-base" style={{ color: '#ffe600', textShadow: '1px 1px 0 #ff007f' }}>
-          CATEGORÍAS // ITEMS ARCHIVE
+        <span className="font-bold text-lg" style={{ color: '#0369a1' }}>
+          Categorías de Productos
         </span>
       </div>
       <div className="flex gap-2 align-items-center">
         <span className="p-input-icon-left">
           <i className="pi pi-search" />
           <InputText
-            placeholder="Buscar..."
+            placeholder="Buscar categoría..."
             value={globalFilter}
             onChange={(e) => setGlobalFilter(e.target.value)}
             className="w-14rem"
           />
         </span>
         <Button
-          label="NUEVA CATEGORÍA"
+          label="Nueva Categoría"
           icon="pi pi-plus"
           onClick={() => {
             retroAudio.playCoin();

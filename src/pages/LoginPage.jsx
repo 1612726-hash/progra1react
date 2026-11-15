@@ -6,6 +6,7 @@ import { Toast } from 'primereact/toast';
 import { useAuth } from '../hooks/useAuth';
 import { ROUTES } from '../constants/routeConstants';
 import { retroAudio } from '../utils/retroSound';
+import { PacmanSprite, SpaceInvaderSprite } from '../components/RetroSprites';
 import '../styles/retroLogin.css';
 
 export const LoginPage = () => {
@@ -20,7 +21,7 @@ export const LoginPage = () => {
     if (!soundEnabled) {
       retroAudio.playCoin();
     }
-    setSoundEnabled(prev => !prev);
+    setSoundEnabled((prev) => !prev);
   };
 
   const handleSubmit = async (e) => {
@@ -33,9 +34,9 @@ export const LoginPage = () => {
       if (soundEnabled) retroAudio.playVictory();
       toastRef.current?.show({
         severity: 'success',
-        summary: '★ LEVEL 1 UNLOCKED ★',
-        detail: 'Acceso autorizado. Cargando mapa de juego...',
-        life: 1500,
+        summary: 'Acceso Autorizado',
+        detail: 'Bienvenido a Video Club Aero Professional.',
+        life: 2000,
       });
       setTimeout(() => {
         navigate(ROUTES.DASHBOARD);
@@ -44,8 +45,8 @@ export const LoginPage = () => {
       if (soundEnabled) retroAudio.playError();
       toastRef.current?.show({
         severity: 'error',
-        summary: 'GAME OVER',
-        detail: result.message || 'Credenciales no reconocidas',
+        summary: 'Error de Acceso',
+        detail: result.message || 'Credenciales de usuario no válidas',
         life: 4000,
       });
     }
@@ -55,82 +56,85 @@ export const LoginPage = () => {
     <div className="retro-wrapper">
       <Toast ref={toastRef} position="top-right" />
 
-      {/* CRT Scanline Filter & Ambient Elements */}
-      <div className="retro-scanlines" />
-      <div className="retro-sun" />
-      <div className="retro-grid-floor" />
+      {/* Burbujas y Destellos Frutiger Aero en el fondo */}
+      <div className="aero-bokeh-container">
+        <div className="aero-bubble" />
+        <div className="aero-bubble" />
+        <div className="aero-bubble" />
+        <div className="aero-bubble" />
+        <div className="aero-bubble" />
+      </div>
 
-      {/* Sound Toggle Floating Button */}
+      {/* Botón Flotante de Audio Cristalino */}
       <div className="absolute top-0 right-0 p-3 z-5">
         <button
           type="button"
           onClick={toggleSound}
-          title={soundEnabled ? 'Silenciar Efectos 8-Bit' : 'Activar Sonidos 8-Bit'}
+          title={soundEnabled ? 'Silenciar Efectos de Sonido' : 'Activar Sonidos Aero'}
           style={{
-            background: 'rgba(14, 6, 31, 0.85)',
-            border: '2px solid #00ffcc',
-            color: soundEnabled ? '#ffe600' : '#888',
-            fontFamily: "'VT323', monospace",
-            fontSize: '1.2rem',
-            padding: '6px 12px',
-            borderRadius: '4px',
+            background: 'rgba(255, 255, 255, 0.75)',
+            backdropFilter: 'blur(10px)',
+            border: '1px solid rgba(255, 255, 255, 0.95)',
+            color: soundEnabled ? '#0284c7' : '#94a3b8',
+            fontFamily: "'Plus Jakarta Sans', sans-serif",
+            fontWeight: 600,
+            fontSize: '0.85rem',
+            padding: '8px 16px',
+            borderRadius: '999px',
             cursor: 'pointer',
-            boxShadow: '0 0 10px rgba(0, 255, 204, 0.4)',
+            boxShadow: '0 4px 14px rgba(2, 132, 199, 0.15)',
+            transition: 'all 0.2s ease',
           }}
         >
-          {soundEnabled ? '🔊 SFX: ON' : '🔇 SFX: OFF'}
+          {soundEnabled ? '🔔 Sonido: Activado' : '🔕 Sonido: Desactivado'}
         </button>
       </div>
 
-      {/* Arcade Cabinet Screen */}
+      {/* Contenedor Aero Glassmorphism */}
       <div className="arcade-box">
-        {/* HUD Superior estilo Arcade */}
+        {/* HUD Superior / Badge de Estado */}
         <div className="arcade-hud">
           <div className="arcade-hud-item">
-            1UP <span>009940</span>
+            <span>POS PRO</span>
+            <span>v2.5</span>
           </div>
           <div className="arcade-hud-item">
-            HIGH <span>999990</span>
+            <span style={{ color: '#10b981' }}>●</span>
+            <span>SISTEMA ACTIVO</span>
           </div>
           <div className="arcade-hud-item">
-            LIVES <span className="pixel-heart">♥♥♥</span>
+            <SpaceInvaderSprite size={16} />
+            <span>AERO EDITION</span>
           </div>
         </div>
 
-        {/* Título Principal */}
-        <div className="text-center mb-3">
-          <div className="inline-block mb-1">
-            <span style={{ fontSize: '2.5rem', filter: 'drop-shadow(0 0 10px #ff007f)' }}>
-              📼
-            </span>
+        {/* Logo y Encabezado Principal */}
+        <div className="text-center mb-4">
+          <div className="inline-block mb-2">
+            <PacmanSprite size={52} />
           </div>
           <h1 className="arcade-title">VIDEO CLUB</h1>
-          <div className="arcade-subtitle">RETRO EDITION v1.0</div>
-          <div
-            className="retro-blink mt-2"
-            style={{
-              fontFamily: "'Press Start 2P', monospace",
-              fontSize: '0.65rem',
-              color: '#00ffcc',
-              letterSpacing: '1px',
-            }}
+          <div className="arcade-subtitle">FRUTIGER AERO PROFESSIONAL</div>
+          <p
+            className="m-0 mt-1 text-xs"
+            style={{ color: '#64748b', fontWeight: 500 }}
           >
-            ▶ PRESS START TO PLAY ◀
-          </div>
+            Gestión inteligente de ventas, rentas y catálogo comercial
+          </p>
         </div>
 
         {/* Formulario de Login */}
-        <form onSubmit={handleSubmit} className="mt-3">
+        <form onSubmit={handleSubmit} className="mt-2">
           {/* Campo Usuario */}
           <div className="arcade-input-group">
             <label className="arcade-label" htmlFor="arcadeUser">
-              &gt; PLAYER NAME [USUARIO]
+              Usuario de Acceso
             </label>
             <InputText
               id="arcadeUser"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              placeholder="PLAYER_1"
+              placeholder="Ej. admin"
               className="arcade-input"
               autoComplete="username"
               required
@@ -140,7 +144,7 @@ export const LoginPage = () => {
           {/* Campo Contraseña */}
           <div className="arcade-input-group">
             <label className="arcade-label" htmlFor="arcadePass">
-              &gt; SECRET CODE [CONTRASEÑA]
+              Contraseña
             </label>
             <Password
               inputId="arcadePass"
@@ -153,32 +157,32 @@ export const LoginPage = () => {
               inputClassName="arcade-input"
               autoComplete="current-password"
             />
-            {/* Indicador de acceso restringido */}
+            {/* Indicador de seguridad */}
             <div className="arcade-badge-dummy">
               <span>🔒</span>
-              <span>ACCESO RESTRINGIDO: IDENTIFÍCATE PARA JUGAR</span>
+              <span>Conexión cifrada y segura con el servidor POS</span>
             </div>
           </div>
 
-          {/* Botón Arcade 3D */}
+          {/* Botón Iniciar Sesión Glossy Aqua */}
           <button
             type="submit"
             disabled={isLoading}
             className="arcade-btn-start"
             onMouseEnter={() => soundEnabled && retroAudio.playCoin()}
           >
-            {isLoading ? 'LOADING LEVEL...' : '🎮 INSERT COIN / PUSH START'}
+            {isLoading ? 'Iniciando Sesión...' : 'Iniciar Sesión'}
           </button>
         </form>
 
-        {/* Footer del Arcade */}
+        {/* Footer */}
         <div className="arcade-footer">
           <div>
-            <span>STAGE: </span>
-            <strong style={{ color: '#ffe600' }}>SPRING-BOOT:8080</strong>
+            <span>SERVIDOR: </span>
+            <strong>SPRING-BOOT : 8080</strong>
           </div>
           <div>
-            <span style={{ color: '#00ffcc' }}>CREDITS: 01</span>
+            <span style={{ color: '#0284c7' }}>ESTADO: ONLINE</span>
           </div>
         </div>
       </div>

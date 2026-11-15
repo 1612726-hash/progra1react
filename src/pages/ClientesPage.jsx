@@ -131,8 +131,8 @@ export const ClientesPage = () => {
     <div className="flex justify-content-between align-items-center gap-3 flex-wrap">
       <div className="flex align-items-center gap-2">
         <span style={{ fontSize: '1.3rem' }}>👥</span>
-        <span className="arcade-font-pixel text-base" style={{ color: '#ffe600', textShadow: '1px 1px 0 #ff007f' }}>
-          CLIENTES // PLAYER DIRECTORY
+        <span className="font-bold text-lg" style={{ color: '#0369a1' }}>
+          Directorio de Clientes / Socios
         </span>
       </div>
       <div className="flex gap-2 align-items-center">
@@ -146,7 +146,7 @@ export const ClientesPage = () => {
           />
         </span>
         <Button
-          label="NUEVO CLIENTE"
+          label="Nuevo Cliente"
           icon="pi pi-plus"
           onClick={() => {
             retroAudio.playCoin();

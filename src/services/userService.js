@@ -59,3 +59,12 @@ export const createFactura = async (venta) => {
     throw error;
   }
 };
+
+export const userService = {
+  getAll: fetchUsers,
+  getFacturas: fetchFacturas,
+  getByUsuario: fetchFacturasByUsuario,
+  createFactura,
+};
+
+export default userService;

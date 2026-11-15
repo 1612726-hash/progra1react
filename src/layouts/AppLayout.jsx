@@ -7,7 +7,7 @@ import { Ripple } from 'primereact/ripple';
 import { useAuth } from '../hooks/useAuth';
 import { ROUTES } from '../constants/routeConstants';
 import { retroAudio } from '../utils/retroSound';
-import { PacmanSprite, GhostSprite, SpaceShipSprite, SpaceInvaderSprite } from '../components/RetroSprites';
+import { PacmanSprite, SpaceShipSprite, SpaceInvaderSprite, GhostSprite } from '../components/RetroSprites';
 
 export const AppLayout = () => {
   const [sidebarVisible, setSidebarVisible] = useState(false);
@@ -22,13 +22,13 @@ export const AppLayout = () => {
   };
 
   const navItems = [
-    { label: 'DASHBOARD', icon: 'pi pi-home', path: ROUTES.DASHBOARD, code: '01' },
-    { label: 'COMPRAR CARTUCHOS', icon: 'pi pi-shopping-cart', path: ROUTES.COMPRAR, code: '02' },
-    { label: 'RENTAR CARTUCHOS', icon: 'pi pi-clock', path: ROUTES.RENTAR, code: '03' },
-    { label: 'CATÁLOGO CARTUCHOS', icon: 'pi pi-box', path: ROUTES.PRODUCTOS, code: '04' },
-    { label: 'CONSOLAS / CATEGORÍAS', icon: 'pi pi-tags', path: ROUTES.CATEGORIAS, code: '05' },
-    { label: 'SOCIOS / CLIENTES', icon: 'pi pi-id-card', path: ROUTES.CLIENTES, code: '06' },
-    { label: 'FACTURAS & USUARIOS (API)', icon: 'pi pi-receipt', path: ROUTES.USERS, code: '07' },
+    { label: 'Dashboard', icon: 'pi pi-home', path: ROUTES.DASHBOARD, code: '01' },
+    { label: 'Comprar Cartuchos', icon: 'pi pi-shopping-cart', path: ROUTES.COMPRAR, code: '02' },
+    { label: 'Rentar Cartuchos', icon: 'pi pi-clock', path: ROUTES.RENTAR, code: '03' },
+    { label: 'Catálogo de Juegos', icon: 'pi pi-box', path: ROUTES.PRODUCTOS, code: '04' },
+    { label: 'Consolas / Categorías', icon: 'pi pi-tags', path: ROUTES.CATEGORIAS, code: '05' },
+    { label: 'Socios / Clientes', icon: 'pi pi-id-card', path: ROUTES.CLIENTES, code: '06' },
+    { label: 'Facturas & API', icon: 'pi pi-receipt', path: ROUTES.USERS, code: '07' },
   ];
 
   const handleNavClick = (path) => {
@@ -39,16 +39,27 @@ export const AppLayout = () => {
 
   const customHeader = (
     <div className="flex align-items-center gap-3">
-      <PacmanSprite size={38} />
+      <PacmanSprite size={36} />
       <div>
         <span
-          className="block font-bold text-sm"
-          style={{ fontFamily: "'Press Start 2P', monospace", color: '#ffe600', letterSpacing: '1px' }}
+          className="block font-bold text-base"
+          style={{
+            fontFamily: "'Outfit', sans-serif",
+            color: '#0284c7',
+            letterSpacing: '-0.02em',
+          }}
         >
           VIDEO CLUB
         </span>
-        <span style={{ fontFamily: "'VT323', monospace", fontSize: '1.2rem', color: '#00ffcc' }}>
-          &gt; COMPRA & RENTA DE CARTUCHOS
+        <span
+          style={{
+            fontFamily: "'Plus Jakarta Sans', sans-serif",
+            fontSize: '0.8rem',
+            color: '#64748b',
+            fontWeight: 500,
+          }}
+        >
+          Frutiger Aero Professional
         </span>
       </div>
     </div>
@@ -56,89 +67,94 @@ export const AppLayout = () => {
 
   return (
     <div className="min-h-screen flex flex-column surface-ground">
-      {/* Barra superior estilo Marquesina Retro */}
+      {/* Barra superior estilo Aero Glass Ribbon */}
       <header className="retro-topbar px-3 md:px-4 py-2 sticky top-0 z-5 flex justify-content-between align-items-center">
         <div className="flex align-items-center gap-3">
           <Button
             icon="pi pi-bars"
             text
             rounded
-            aria-label="Menú Arcade"
+            aria-label="Menú Principal"
             onClick={() => {
               retroAudio.playCoin();
               setSidebarVisible((prev) => !prev);
             }}
-            tooltip="Menú del Video Club"
+            tooltip="Menú del Sistema"
             tooltipOptions={{ position: 'bottom' }}
-            style={{ color: '#00ffcc' }}
+            style={{ color: '#0284c7' }}
           />
 
           <div
             className="flex align-items-center gap-2 cursor-pointer"
             onClick={() => handleNavClick(ROUTES.DASHBOARD)}
           >
-            <SpaceShipSprite size={28} />
+            <SpaceShipSprite size={32} />
             <div className="flex flex-column">
               <span
-                className="hidden sm:inline"
+                className="font-bold"
                 style={{
-                  fontFamily: "'Press Start 2P', monospace",
-                  fontSize: '0.82rem',
-                  color: '#ffe600',
-                  textShadow: '2px 2px 0 #ff007f',
-                  letterSpacing: '1px',
+                  fontFamily: "'Outfit', sans-serif",
+                  fontSize: '1.15rem',
+                  color: '#0369a1',
+                  letterSpacing: '-0.02em',
+                  lineHeight: '1.1',
                 }}
               >
                 VIDEO CLUB
               </span>
               <span
-                className="hidden sm:inline"
-                style={{ fontFamily: "'VT323', monospace", fontSize: '0.95rem', color: '#00ffcc' }}
+                className="text-xs"
+                style={{
+                  fontFamily: "'Plus Jakarta Sans', sans-serif",
+                  color: '#0ea5e9',
+                  fontWeight: 600,
+                  letterSpacing: '0.04em',
+                }}
               >
-                RETRO CARTUCHOS
+                AERO PROFESSIONAL
               </span>
             </div>
           </div>
 
-          {/* Botones directos principales de COMPRA y RENTA */}
+          {/* Accesos rápidos superiores tipo Glass Tabs */}
           <div className="hidden lg:flex align-items-center gap-2 ml-3">
             <Button
-              label="COMPRAR"
+              label="Comprar"
               icon="pi pi-shopping-cart"
               size="small"
               outlined={location.pathname !== ROUTES.COMPRAR}
               onClick={() => handleNavClick(ROUTES.COMPRAR)}
             />
             <Button
-              label="RENTAR"
+              label="Rentar"
               icon="pi pi-clock"
               size="small"
               outlined={location.pathname !== ROUTES.RENTAR}
               onClick={() => handleNavClick(ROUTES.RENTAR)}
             />
             <Button
-              label="CATÁLOGO"
+              label="Catálogo"
               icon="pi pi-box"
               size="small"
               outlined={location.pathname !== ROUTES.PRODUCTOS}
               onClick={() => handleNavClick(ROUTES.PRODUCTOS)}
             />
             <Button
-              label="CONSOLAS"
+              label="Consolas"
               icon="pi pi-tags"
               size="small"
               outlined={location.pathname !== ROUTES.CATEGORIAS}
               onClick={() => handleNavClick(ROUTES.CATEGORIAS)}
             />
             <Button
-              label="SOCIOS"
+              label="Socios"
               icon="pi pi-id-card"
               size="small"
               outlined={location.pathname !== ROUTES.CLIENTES}
               onClick={() => handleNavClick(ROUTES.CLIENTES)}
             />
             <Button
-              label="FACTURAS"
+              label="Facturas"
               icon="pi pi-receipt"
               size="small"
               outlined={location.pathname !== ROUTES.USERS}
@@ -147,49 +163,55 @@ export const AppLayout = () => {
           </div>
         </div>
 
-        {/* Sprites Pacman y Nave en la marquesina superior */}
-        <div className="hidden xl:flex align-items-center gap-3">
-          <div className="flex align-items-center gap-1">
-            <PacmanSprite size={24} />
-            <span style={{ color: '#ffe600', fontSize: '0.9rem', letterSpacing: '3px' }}>●●●</span>
-            <GhostSprite size={22} color="#FF0000" />
-            <GhostSprite size={22} color="#00FFCC" />
-          </div>
-          <SpaceInvaderSprite size={22} color="#39FF14" />
+        {/* Iconos Aero Decorativos */}
+        <div className="hidden xl:flex align-items-center gap-2">
+          <GhostSprite size={20} color="#10b981" />
+          <SpaceInvaderSprite size={20} color="#06b6d4" />
         </div>
 
-        {/* Perfil del jugador y botón de salida */}
+        {/* Perfil del operador y botón de salida */}
         <div className="flex align-items-center gap-2 md:gap-3">
           <div
-            className="hidden sm:flex align-items-center gap-2 px-3 py-1 border-round"
+            className="hidden sm:flex align-items-center gap-2 px-3 py-1 border-round-3xl"
             style={{
-              background: 'rgba(0, 255, 204, 0.1)',
-              border: '1px dashed #00ffcc',
-              fontFamily: "'VT323', monospace",
-              fontSize: '1.25rem',
-              color: '#00ffcc',
+              background: 'rgba(255, 255, 255, 0.75)',
+              border: '1px solid rgba(186, 230, 253, 0.8)',
+              boxShadow: '0 2px 6px rgba(2, 132, 199, 0.08), inset 0 1px 1px #fff',
+              fontSize: '0.875rem',
+              fontWeight: 600,
+              color: '#0369a1',
             }}
           >
-            <span style={{ color: '#ffe600' }}>★ P1:</span>
+            <span style={{ color: '#0ea5e9' }}>👤 Operador:</span>
             <span>{user?.name || user?.username || 'ADMIN'}</span>
-            <span className="arcade-blink-text" style={{ color: '#39ff14' }}>● LIVE</span>
+            <span
+              className="arcade-blink-text px-2 py-0 border-round-3xl text-xs"
+              style={{
+                background: '#dcfce7',
+                color: '#15803d',
+                border: '1px solid #86efac',
+                fontWeight: 700,
+              }}
+            >
+              ● ONLINE
+            </span>
           </div>
 
           <Divider layout="vertical" className="hidden sm:inline-flex my-0" />
 
           <Button
             icon="pi pi-power-off"
-            label="EXIT"
+            label="Salir"
             severity="danger"
             size="small"
             onClick={handleLogout}
-            tooltip="Cerrar Sesión / Game Over"
+            tooltip="Cerrar Sesión Segura"
             tooltipOptions={{ position: 'bottom' }}
           />
         </div>
       </header>
 
-      {/* Menú lateral Arcade Sidebar */}
+      {/* Menú lateral Sidebar estilo Aero Frosted Glass */}
       <Sidebar
         visible={sidebarVisible}
         onHide={() => setSidebarVisible(false)}
@@ -198,22 +220,31 @@ export const AppLayout = () => {
       >
         <div className="flex flex-column justify-content-between h-full pt-2">
           <div className="flex flex-column gap-2">
-            {/* Animación Pac-Man en Sidebar */}
+            {/* Indicador de Estado del Sistema */}
             <div
-              className="px-3 py-2 border-round mb-2 flex justify-content-between align-items-center"
+              className="px-3 py-2 border-round-xl mb-3 flex justify-content-between align-items-center"
               style={{
-                background: 'rgba(255, 0, 127, 0.12)',
-                border: '1px solid #ff007f',
-                fontFamily: "'VT323', monospace",
-                fontSize: '1.25rem',
-                color: '#ff007f',
+                background: 'linear-gradient(135deg, rgba(224, 242, 254, 0.7) 0%, rgba(240, 249, 255, 0.7) 100%)',
+                border: '1px solid rgba(186, 230, 253, 0.9)',
+                boxShadow: '0 2px 8px rgba(2, 132, 199, 0.08)',
               }}
             >
               <div className="flex align-items-center gap-2">
-                <PacmanSprite size={22} />
-                <span>CREDITS: 99</span>
+                <PacmanSprite size={20} />
+                <span style={{ fontSize: '0.85rem', fontWeight: 600, color: '#0369a1' }}>
+                  Terminal POS Activa
+                </span>
               </div>
-              <span className="arcade-blink-text" style={{ color: '#ffe600' }}>INSERT COIN</span>
+              <span
+                className="px-2 py-0 border-round-3xl text-xs"
+                style={{
+                  background: '#dcfce7',
+                  color: '#15803d',
+                  fontWeight: 700,
+                }}
+              >
+                Conectado
+              </span>
             </div>
 
             <ul className="list-none p-0 m-0">
@@ -224,25 +255,29 @@ export const AppLayout = () => {
                     <button
                       type="button"
                       onClick={() => handleNavClick(item.path)}
-                      className="p-ripple flex align-items-center w-full p-3 border-round border-none text-left cursor-pointer transition-all transition-duration-150"
+                      className="p-ripple flex align-items-center w-full p-3 border-round-xl border-none text-left cursor-pointer transition-all transition-duration-150"
                       style={{
                         background: isActive
-                          ? 'linear-gradient(90deg, #ff007f 0%, #aa0055 100%)'
-                          : 'rgba(16, 6, 36, 0.7)',
-                        border: isActive ? '2px solid #ffe600' : '1px solid rgba(0, 255, 204, 0.3)',
-                        boxShadow: isActive ? '0 0 12px rgba(255, 0, 127, 0.6)' : 'none',
-                        color: isActive ? '#ffe600' : '#00ffcc',
-                        fontFamily: "'Press Start 2P', monospace",
-                        fontSize: '0.65rem',
-                        letterSpacing: '1px',
+                          ? 'linear-gradient(180deg, #38bdf8 0%, #0ea5e9 45%, #0284c7 100%)'
+                          : 'rgba(255, 255, 255, 0.6)',
+                        border: isActive
+                          ? '1px solid #0284c7'
+                          : '1px solid rgba(226, 232, 240, 0.8)',
+                        boxShadow: isActive
+                          ? '0 6px 16px rgba(2, 132, 199, 0.35), inset 0 1px 1px rgba(255,255,255,0.8)'
+                          : '0 1px 3px rgba(0, 0, 0, 0.03)',
+                        color: isActive ? '#ffffff' : '#334155',
+                        fontFamily: "'Plus Jakarta Sans', sans-serif",
+                        fontWeight: 600,
+                        fontSize: '0.9rem',
                       }}
                     >
-                      <span className="mr-2" style={{ color: '#ff007f', fontSize: '0.75rem' }}>
-                        [{item.code}]
-                      </span>
-                      <i className={`${item.icon} mr-3 text-base`} />
+                      <i
+                        className={`${item.icon} mr-3 text-lg`}
+                        style={{ color: isActive ? '#ffffff' : '#0284c7' }}
+                      />
                       <span className="flex-1">{item.label}</span>
-                      {isActive && <span className="arcade-blink-text">◀</span>}
+                      {isActive && <i className="pi pi-chevron-right text-xs" />}
                       <Ripple />
                     </button>
                   </li>
@@ -253,23 +288,25 @@ export const AppLayout = () => {
 
           <div className="border-top-1 surface-border pt-3">
             <div
-              className="p-3 border-round mb-3"
+              className="p-3 border-round-xl mb-3"
               style={{
-                background: 'rgba(0, 255, 204, 0.08)',
-                border: '1px solid #00ffcc',
-                fontFamily: "'VT323', monospace",
+                background: 'rgba(240, 249, 255, 0.75)',
+                border: '1px solid rgba(186, 230, 253, 0.8)',
               }}
             >
-              <div className="flex align-items-center gap-2 mb-1" style={{ color: '#ffe600', fontSize: '1.2rem' }}>
-                <SpaceShipSprite size={20} />
-                <span>VIDEO CLUB RETRO</span>
+              <div
+                className="flex align-items-center gap-2 mb-1"
+                style={{ color: '#0369a1', fontWeight: 700, fontSize: '0.9rem' }}
+              >
+                <SpaceShipSprite size={18} />
+                <span>VIDEO CLUB AERO</span>
               </div>
-              <p className="m-0" style={{ fontSize: '1.1rem', color: '#a89bc9' }}>
-                Cartuchos NES, SNES, Sega, N64 y Game Boy listos para compra y renta.
+              <p className="m-0 text-xs" style={{ color: '#64748b', lineHeight: 1.4 }}>
+                Gestión de inventario de cartuchos, ventas, cobros y devoluciones.
               </p>
             </div>
             <Button
-              label="GAME OVER (SALIR)"
+              label="Cerrar Sesión"
               icon="pi pi-power-off"
               severity="danger"
               className="w-full"

@@ -265,12 +265,12 @@ export const ProductosPage = () => {
       <div className="flex justify-content-between align-items-center flex-wrap gap-2">
         <div className="flex align-items-center gap-2">
           <span style={{ fontSize: '1.4rem' }}>📦</span>
-          <span className="arcade-font-pixel text-base" style={{ color: '#ffe600', textShadow: '1px 1px 0 #ff007f' }}>
-            PRODUCTOS // INVENTORY VAULT
+          <span className="font-bold text-lg" style={{ color: '#0369a1' }}>
+            Inventario de Productos y Cartuchos
           </span>
         </div>
         <Button
-          label="NUEVO PRODUCTO"
+          label="Nuevo Producto"
           icon="pi pi-plus"
           onClick={() => {
             retroAudio.playCoin();

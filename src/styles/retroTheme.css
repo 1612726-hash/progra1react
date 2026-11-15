@@ -1,281 +1,413 @@
-/* 🎮 TEMA RETRO ARCADE GLOBAL PARA TODO EL SISTEMA POS */
-@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap');
+/* ==========================================================================
+   ✨ FRUTIGER AERO PROFESSIONAL GLOBAL THEME
+   Estética Glassmorphism, Glossy Aqua, Luces Etéreas y Tipografía Ejecutiva
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&display=swap');
 
 :root {
-  --retro-bg-dark: #090214;
-  --retro-card-bg: rgba(18, 7, 38, 0.95);
-  --retro-neon-cyan: #00ffcc;
-  --retro-neon-pink: #ff007f;
-  --retro-neon-yellow: #ffe600;
-  --retro-neon-green: #39ff14;
-  --retro-neon-purple: #9d4edd;
-  --retro-text-light: #f5f0ff;
-  --retro-border-glow: 0 0 10px rgba(0, 255, 204, 0.4), inset 0 0 10px rgba(255, 0, 127, 0.15);
+  /* Paleta Frutiger Aero */
+  --aero-sky-primary: #0284c7;
+  --aero-sky-light: #38bdf8;
+  --aero-sky-dark: #0369a1;
+  --aero-sky-soft: #e0f2fe;
+
+  --aero-aqua: #06b6d4;
+  --aero-aqua-light: #67e8f9;
+  --aero-emerald: #10b981;
+  --aero-emerald-light: #34d399;
+  --aero-emerald-dark: #059669;
+
+  --aero-glass-surface: rgba(255, 255, 255, 0.78);
+  --aero-glass-surface-hover: rgba(255, 255, 255, 0.92);
+  --aero-glass-border: rgba(255, 255, 255, 0.85);
+  --aero-glass-border-subtle: rgba(186, 230, 253, 0.55);
+
+  --aero-text-title: #0f172a;
+  --aero-text-main: #1e293b;
+  --aero-text-muted: #64748b;
+  --aero-text-link: #0284c7;
+
+  /* Sombras y reflejos Aero */
+  --aero-shadow-sm: 0 4px 12px rgba(2, 132, 199, 0.08);
+  --aero-shadow-md: 0 10px 25px -3px rgba(2, 132, 199, 0.12), 0 4px 10px -2px rgba(0, 0, 0, 0.03);
+  --aero-shadow-lg: 0 18px 38px -4px rgba(2, 132, 199, 0.18), 0 8px 16px -4px rgba(16, 185, 129, 0.08);
+  --aero-gloss-highlight: inset 0 1px 1px rgba(255, 255, 255, 0.95), inset 0 -1px 2px rgba(2, 132, 199, 0.12);
+
+  --font-family: 'Plus Jakarta Sans', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  --font-display: 'Outfit', 'Plus Jakarta Sans', 'Segoe UI', sans-serif;
 }
 
-/* Fondo global con sutil cuadrícula cibernética */
+/* 🌿 Fondo global Frutiger Aero (Atmósfera luminosa, cielo y agua) */
 body, .surface-ground, .layout-container {
-  background-color: var(--retro-bg-dark) !important;
+  font-family: var(--font-family) !important;
+  background-color: #e0f2fe !important;
   background-image: 
-    linear-gradient(rgba(255, 0, 127, 0.05) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0, 255, 204, 0.05) 1px, transparent 1px) !important;
-  background-size: 32px 32px !important;
-  color: var(--retro-text-light) !important;
+    radial-gradient(circle at 15% 15%, rgba(56, 189, 248, 0.35) 0%, transparent 45%),
+    radial-gradient(circle at 85% 25%, rgba(52, 211, 153, 0.25) 0%, transparent 40%),
+    radial-gradient(circle at 50% 80%, rgba(6, 182, 212, 0.2) 0%, transparent 50%),
+    linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 50%, #dbeafe 100%) !important;
+  background-attachment: fixed !important;
+  color: var(--aero-text-main) !important;
+  min-height: 100vh;
+  letter-spacing: -0.01em;
 }
 
-/* Encabezados y títulos en pixel art */
-h1, h2, h3, .arcade-font-pixel {
-  font-family: 'Press Start 2P', monospace !important;
-  letter-spacing: 1px;
+/* 💎 Tipografía moderna y pulcra */
+h1, h2, h3, h4, h5, h6, .arcade-font-pixel {
+  font-family: var(--font-display) !important;
+  color: var(--aero-text-title) !important;
+  letter-spacing: -0.02em;
+  font-weight: 700;
+  text-shadow: none !important;
 }
 
-/* Tarjetas con estilo Gabinete Arcade */
+/* 🧊 Tarjetas Glassmorphism Aero */
 .surface-card, .p-card {
-  background: var(--retro-card-bg) !important;
-  border: 2px solid var(--retro-neon-cyan) !important;
-  box-shadow: var(--retro-border-glow) !important;
-  border-radius: 6px !important;
-  color: var(--retro-text-light) !important;
+  background: var(--aero-glass-surface) !important;
+  backdrop-filter: blur(16px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(16px) saturate(180%) !important;
+  border: 1px solid var(--aero-glass-border) !important;
+  box-shadow: var(--aero-shadow-md), var(--aero-gloss-highlight) !important;
+  border-radius: 16px !important;
+  color: var(--aero-text-main) !important;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease !important;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Reflejo superior curvado glossy para tarjetas */
+.surface-card::before, .p-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 40%;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.45) 0%, rgba(255, 255, 255, 0.02) 100%);
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
+  pointer-events: none;
+}
+
+.surface-card:hover, .p-card:hover {
+  box-shadow: var(--aero-shadow-lg), var(--aero-gloss-highlight) !important;
 }
 
 .p-card .p-card-title {
-  font-family: 'Press Start 2P', monospace !important;
-  font-size: 0.85rem !important;
-  color: var(--retro-neon-yellow) !important;
-  text-shadow: 2px 2px 0px var(--retro-neon-pink) !important;
-  letter-spacing: 1px !important;
-  margin-bottom: 1rem !important;
+  font-family: var(--font-display) !important;
+  font-size: 1.15rem !important;
+  font-weight: 700 !important;
+  color: var(--aero-sky-dark) !important;
+  letter-spacing: -0.01em !important;
+  text-shadow: none !important;
+  margin-bottom: 0.75rem !important;
 }
 
-/* Barra superior de navegación estilo marquesina */
+/* 🌐 Barra superior Aero Glass Ribbon */
 .retro-topbar {
-  background: #110526 !important;
-  border-bottom: 3px solid var(--retro-neon-pink) !important;
-  box-shadow: 0 4px 18px rgba(255, 0, 127, 0.35) !important;
+  background: rgba(255, 255, 255, 0.82) !important;
+  backdrop-filter: blur(18px) saturate(200%) !important;
+  -webkit-backdrop-filter: blur(18px) saturate(200%) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.95) !important;
+  box-shadow: 0 4px 20px rgba(2, 132, 199, 0.12), inset 0 -1px 0 rgba(186, 230, 253, 0.6) !important;
 }
 
-/* Botones arcade en todo el sistema */
+/* 🔘 Botones Glossy Aqua / Aero Glass */
 .p-button {
-  font-family: 'Press Start 2P', monospace !important;
-  font-size: 0.68rem !important;
-  border-radius: 4px !important;
-  letter-spacing: 1px !important;
-  transition: all 0.1s ease !important;
+  font-family: var(--font-family) !important;
+  font-size: 0.875rem !important;
+  font-weight: 600 !important;
+  border-radius: 10px !important;
+  letter-spacing: 0.01em !important;
+  padding: 0.55rem 1.15rem !important;
+  transition: all 0.18s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  position: relative;
+  overflow: hidden;
 }
 
-.p-button:not(.p-button-text):not(.p-button-outlined) {
-  background: linear-gradient(180deg, #ff007f 0%, #a60053 100%) !important;
-  border: 2px solid #ffe600 !important;
-  color: #ffe600 !important;
-  text-shadow: 1px 1px 0 #000 !important;
-  box-shadow: 0 4px 0 #520029, 0 6px 12px rgba(255, 0, 127, 0.4) !important;
+/* Botón primario glossy celeste */
+.p-button:not(.p-button-text):not(.p-button-outlined):not(.p-button-danger):not(.p-button-success):not(.p-button-warning) {
+  background: linear-gradient(180deg, #38bdf8 0%, #0ea5e9 45%, #0284c7 50%, #0369a1 100%) !important;
+  border: 1px solid #0284c7 !important;
+  color: #ffffff !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.25) !important;
+  box-shadow: 0 4px 12px rgba(2, 132, 199, 0.35), inset 0 1px 1px rgba(255, 255, 255, 0.85), inset 0 -1px 2px rgba(0, 0, 0, 0.25) !important;
 }
 
-.p-button:not(.p-button-text):not(.p-button-outlined):hover {
-  background: linear-gradient(180deg, #ff2491 0%, #c40062 100%) !important;
-  box-shadow: 0 4px 0 #520029, 0 8px 16px rgba(255, 0, 127, 0.6) !important;
+.p-button:not(.p-button-text):not(.p-button-outlined):not(.p-button-danger):not(.p-button-success):not(.p-button-warning):hover {
+  background: linear-gradient(180deg, #7dd3fc 0%, #38bdf8 45%, #0ea5e9 50%, #0284c7 100%) !important;
+  box-shadow: 0 6px 18px rgba(2, 132, 199, 0.5), inset 0 1px 2px rgba(255, 255, 255, 0.95) !important;
+  transform: translateY(-1px);
 }
 
-.p-button:not(.p-button-text):not(.p-button-outlined):active {
-  transform: translateY(3px) !important;
-  box-shadow: 0 1px 0 #520029, 0 2px 6px rgba(255, 0, 127, 0.3) !important;
+.p-button:not(.p-button-text):not(.p-button-outlined):not(.p-button-danger):not(.p-button-success):not(.p-button-warning):active {
+  transform: translateY(1px) !important;
+  box-shadow: 0 2px 6px rgba(2, 132, 199, 0.35), inset 0 2px 4px rgba(0, 0, 0, 0.2) !important;
 }
 
+/* Botón de Éxito Glossy Verde Hoja / Esmeralda */
+.p-button-success {
+  background: linear-gradient(180deg, #4ade80 0%, #22c55e 45%, #16a34a 50%, #15803d 100%) !important;
+  border: 1px solid #16a34a !important;
+  color: #ffffff !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.25) !important;
+  box-shadow: 0 4px 12px rgba(22, 163, 74, 0.35), inset 0 1px 1px rgba(255, 255, 255, 0.85), inset 0 -1px 2px rgba(0, 0, 0, 0.25) !important;
+}
+
+.p-button-success:hover {
+  background: linear-gradient(180deg, #86efac 0%, #4ade80 45%, #22c55e 50%, #16a34a 100%) !important;
+  box-shadow: 0 6px 18px rgba(22, 163, 74, 0.45) !important;
+}
+
+/* Botón de Peligro Glossy Coral Cristalino */
+.p-button-danger {
+  background: linear-gradient(180deg, #f87171 0%, #ef4444 45%, #dc2626 50%, #b91c1c 100%) !important;
+  border: 1px solid #dc2626 !important;
+  color: #ffffff !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.25) !important;
+  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.32), inset 0 1px 1px rgba(255, 255, 255, 0.85) !important;
+}
+
+/* Botones Outlined & Text */
 .p-button.p-button-outlined {
-  border: 2px solid var(--retro-neon-cyan) !important;
-  color: var(--retro-neon-cyan) !important;
-  background: rgba(0, 255, 204, 0.05) !important;
+  border: 1.5px solid var(--aero-sky-primary) !important;
+  color: var(--aero-sky-primary) !important;
+  background: rgba(255, 255, 255, 0.6) !important;
+  backdrop-filter: blur(8px) !important;
+  box-shadow: 0 2px 8px rgba(2, 132, 199, 0.1), inset 0 1px 1px rgba(255, 255, 255, 0.9) !important;
 }
 
 .p-button.p-button-outlined:hover {
-  background: rgba(0, 255, 204, 0.18) !important;
-  box-shadow: 0 0 10px rgba(0, 255, 204, 0.5) !important;
+  background: rgba(224, 242, 254, 0.85) !important;
+  color: var(--aero-sky-dark) !important;
+  border-color: var(--aero-sky-light) !important;
+  box-shadow: 0 4px 14px rgba(2, 132, 199, 0.2) !important;
 }
 
 .p-button.p-button-text {
-  color: var(--retro-neon-cyan) !important;
+  color: var(--aero-sky-primary) !important;
+  background: transparent !important;
 }
 
 .p-button.p-button-text:hover {
-  background: rgba(0, 255, 204, 0.12) !important;
+  background: rgba(224, 242, 254, 0.6) !important;
+  color: var(--aero-sky-dark) !important;
 }
 
-/* Tablas DataTables estilo Cyber-Terminal */
+/* 📊 Tablas DataTables estilo Aero Crystal Grid */
 .p-datatable {
-  border: 2px solid rgba(0, 255, 204, 0.3) !important;
-  border-radius: 6px !important;
+  border: 1px solid var(--aero-glass-border-subtle) !important;
+  border-radius: 14px !important;
   overflow: hidden !important;
-  box-shadow: 0 0 15px rgba(0, 255, 204, 0.15) !important;
+  box-shadow: var(--aero-shadow-md) !important;
+  background: rgba(255, 255, 255, 0.85) !important;
+  backdrop-filter: blur(14px) !important;
 }
 
 .p-datatable .p-datatable-header {
-  background: #14062f !important;
-  border-bottom: 2px solid var(--retro-neon-pink) !important;
-  padding: 1rem !important;
+  background: linear-gradient(180deg, rgba(240, 249, 255, 0.95) 0%, rgba(224, 242, 254, 0.95) 100%) !important;
+  border-bottom: 1px solid rgba(186, 230, 253, 0.8) !important;
+  padding: 1rem 1.25rem !important;
+  color: var(--aero-sky-dark) !important;
 }
 
 .p-datatable .p-datatable-thead > tr > th {
-  background: #19073b !important;
-  color: var(--retro-neon-cyan) !important;
-  font-family: 'Press Start 2P', monospace !important;
-  font-size: 0.65rem !important;
+  background: linear-gradient(180deg, #f0f9ff 0%, #e0f2fe 100%) !important;
+  color: var(--aero-sky-dark) !important;
+  font-family: var(--font-display) !important;
+  font-size: 0.8rem !important;
+  font-weight: 700 !important;
   text-transform: uppercase !important;
-  border-bottom: 2px solid rgba(0, 255, 204, 0.4) !important;
-  padding: 0.85rem !important;
-  letter-spacing: 1px !important;
+  letter-spacing: 0.04em !important;
+  border-bottom: 1.5px solid #bae6fd !important;
+  padding: 0.95rem 1rem !important;
 }
 
 .p-datatable .p-datatable-tbody > tr {
-  background: #0f0422 !important;
-  color: #efe8ff !important;
-  font-family: 'VT323', monospace !important;
-  font-size: 1.35rem !important;
-  border-bottom: 1px solid rgba(157, 78, 221, 0.25) !important;
+  background: rgba(255, 255, 255, 0.8) !important;
+  color: var(--aero-text-main) !important;
+  font-family: var(--font-family) !important;
+  font-size: 0.925rem !important;
+  border-bottom: 1px solid #f1f5f9 !important;
   transition: background 0.15s ease !important;
 }
 
 .p-datatable .p-datatable-tbody > tr:nth-child(even) {
-  background: #13052b !important;
+  background: rgba(248, 250, 252, 0.75) !important;
 }
 
 .p-datatable .p-datatable-tbody > tr:hover {
-  background: rgba(255, 0, 127, 0.18) !important;
-  color: #ffffff !important;
+  background: rgba(224, 242, 254, 0.65) !important;
+  color: var(--aero-sky-dark) !important;
 }
 
-/* Paginador retro */
+/* 📄 Paginador Aero Glass */
 .p-paginator {
-  background: #13052b !important;
-  border-top: 2px solid rgba(0, 255, 204, 0.3) !important;
-  font-family: 'VT323', monospace !important;
-  font-size: 1.25rem !important;
-  color: #00ffcc !important;
+  background: rgba(255, 255, 255, 0.9) !important;
+  border-top: 1px solid #e2e8f0 !important;
+  padding: 0.75rem !important;
+  font-family: var(--font-family) !important;
+  border-radius: 0 0 14px 14px !important;
 }
 
-.p-paginator .p-paginator-page.p-highlight {
-  background: var(--retro-neon-pink) !important;
+.p-paginator .p-paginator-pages .p-paginator-page {
+  border-radius: 8px !important;
+  min-width: 2.25rem !important;
+  height: 2.25rem !important;
+  font-weight: 600 !important;
+  transition: all 0.15s ease !important;
+}
+
+.p-paginator .p-paginator-pages .p-paginator-page.p-highlight {
+  background: linear-gradient(180deg, #38bdf8 0%, #0284c7 100%) !important;
   color: #fff !important;
-  border: 1px solid var(--retro-neon-yellow) !important;
+  box-shadow: 0 3px 8px rgba(2, 132, 199, 0.35) !important;
+  border: none !important;
 }
 
-/* Inputs de texto estilo Terminal */
+/* 📝 Inputs de formulario estilo Cristal Pulcro */
 .p-inputtext {
-  background: #0a0316 !important;
-  border: 2px solid rgba(0, 255, 204, 0.5) !important;
-  color: var(--retro-neon-cyan) !important;
-  font-family: 'VT323', monospace !important;
-  font-size: 1.3rem !important;
-  border-radius: 4px !important;
-  box-shadow: inset 0 0 6px rgba(0, 255, 204, 0.2) !important;
+  background: rgba(255, 255, 255, 0.85) !important;
+  border: 1.5px solid #cbd5e1 !important;
+  color: var(--aero-text-main) !important;
+  font-family: var(--font-family) !important;
+  font-size: 0.95rem !important;
+  border-radius: 10px !important;
+  padding: 0.6rem 0.9rem !important;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.04) !important;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease !important;
 }
 
 .p-inputtext:focus {
-  border-color: var(--retro-neon-pink) !important;
-  box-shadow: 0 0 10px rgba(255, 0, 127, 0.5), inset 0 0 6px rgba(255, 0, 127, 0.2) !important;
-  color: var(--retro-neon-yellow) !important;
+  border-color: var(--aero-sky-primary) !important;
+  box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.25), inset 0 1px 2px rgba(0, 0, 0, 0.02) !important;
+  background: #ffffff !important;
 }
 
-/* Barras de progreso estilo Barra de Vida / HP */
+/* 💧 Barra de Progreso Aero Aqua */
 .p-progressbar {
-  background: #060110 !important;
-  border: 2px solid var(--retro-neon-pink) !important;
-  border-radius: 4px !important;
-  box-shadow: 0 0 8px rgba(255, 0, 127, 0.3) !important;
+  background: #e2e8f0 !important;
+  border: 1px solid rgba(255, 255, 255, 0.8) !important;
+  border-radius: 999px !important;
+  overflow: hidden !important;
+  height: 0.75rem !important;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1) !important;
 }
 
 .p-progressbar .p-progressbar-value {
-  background: repeating-linear-gradient(
-    45deg,
-    #00ffcc,
-    #00ffcc 10px,
-    #00d4aa 10px,
-    #00d4aa 20px
-  ) !important;
-  box-shadow: 0 0 12px rgba(0, 255, 204, 0.6) !important;
+  background: linear-gradient(90deg, #38bdf8 0%, #06b6d4 50%, #10b981 100%) !important;
+  border-radius: 999px !important;
+  box-shadow: 0 0 10px rgba(6, 182, 212, 0.5) !important;
 }
 
-/* Etiquetas Tag estilo Arcade */
+/* 🏷️ Etiquetas Tag tipo Píldora Cristalina (Aqua Pills) */
 .p-tag {
-  font-family: 'Press Start 2P', monospace !important;
-  font-size: 0.55rem !important;
-  padding: 0.35rem 0.6rem !important;
-  border-radius: 3px !important;
-  letter-spacing: 1px !important;
-  border: 1px solid currentColor !important;
+  font-family: var(--font-family) !important;
+  font-size: 0.75rem !important;
+  font-weight: 700 !important;
+  padding: 0.35rem 0.75rem !important;
+  border-radius: 999px !important;
+  letter-spacing: 0.02em !important;
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.7), 0 2px 6px rgba(0, 0, 0, 0.05) !important;
+  backdrop-filter: blur(6px) !important;
 }
 
 .p-tag-success {
-  background: rgba(57, 255, 20, 0.15) !important;
-  color: #39ff14 !important;
-  border-color: #39ff14 !important;
-  box-shadow: 0 0 6px rgba(57, 255, 20, 0.4) !important;
+  background: linear-gradient(180deg, #dcfce7 0%, #bbf7d0 100%) !important;
+  color: #15803d !important;
+  border: 1px solid #86efac !important;
 }
 
 .p-tag-warning {
-  background: rgba(255, 230, 0, 0.15) !important;
-  color: #ffe600 !important;
-  border-color: #ffe600 !important;
-  box-shadow: 0 0 6px rgba(255, 230, 0, 0.4) !important;
+  background: linear-gradient(180deg, #fef3c7 0%, #fde68a 100%) !important;
+  color: #b45309 !important;
+  border: 1px solid #fcd34d !important;
 }
 
 .p-tag-danger {
-  background: rgba(255, 0, 127, 0.15) !important;
-  color: #ff007f !important;
-  border-color: #ff007f !important;
-  box-shadow: 0 0 6px rgba(255, 0, 127, 0.4) !important;
+  background: linear-gradient(180deg, #fee2e2 0%, #fecaca 100%) !important;
+  color: #b91c1c !important;
+  border: 1px solid #fca5a5 !important;
 }
 
 .p-tag-info {
-  background: rgba(0, 255, 204, 0.15) !important;
-  color: #00ffcc !important;
-  border-color: #00ffcc !important;
-  box-shadow: 0 0 6px rgba(0, 255, 204, 0.4) !important;
+  background: linear-gradient(180deg, #e0f2fe 0%, #bae6fd 100%) !important;
+  color: #0369a1 !important;
+  border: 1px solid #7dd3fc !important;
 }
 
-/* Ventanas Modales Diálogo */
+/* 🪟 Ventanas Diálogo estilo Aero Glass Window */
 .p-dialog {
-  background: #110526 !important;
-  border: 3px solid var(--retro-neon-cyan) !important;
-  box-shadow: 0 0 30px rgba(0, 255, 204, 0.5), 0 0 0 4px #000 !important;
-  border-radius: 6px !important;
+  background: rgba(255, 255, 255, 0.88) !important;
+  backdrop-filter: blur(20px) saturate(190%) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(190%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.95) !important;
+  box-shadow: 0 25px 60px -15px rgba(2, 132, 199, 0.25), 0 0 0 1px rgba(186, 230, 253, 0.5) !important;
+  border-radius: 18px !important;
+  overflow: hidden !important;
 }
 
 .p-dialog .p-dialog-header {
-  background: #180838 !important;
-  color: var(--retro-neon-yellow) !important;
-  border-bottom: 2px solid var(--retro-neon-pink) !important;
-  font-family: 'Press Start 2P', monospace !important;
-  font-size: 0.85rem !important;
+  background: linear-gradient(180deg, rgba(240, 249, 255, 0.9) 0%, rgba(224, 242, 254, 0.7) 100%) !important;
+  color: var(--aero-sky-dark) !important;
+  border-bottom: 1px solid rgba(186, 230, 253, 0.8) !important;
+  font-family: var(--font-display) !important;
+  font-size: 1.15rem !important;
+  font-weight: 700 !important;
+  padding: 1.25rem !important;
 }
 
 .p-dialog .p-dialog-content {
-  background: #110526 !important;
-  color: #e6e0f8 !important;
+  background: transparent !important;
+  color: var(--aero-text-main) !important;
+  padding: 1.5rem !important;
 }
 
 .p-dialog .p-dialog-footer {
-  background: #180838 !important;
-  border-top: 1px solid rgba(0, 255, 204, 0.25) !important;
+  background: rgba(248, 250, 252, 0.8) !important;
+  border-top: 1px solid rgba(226, 232, 240, 0.8) !important;
+  padding: 1rem 1.5rem !important;
 }
 
-/* Menú lateral Sidebar Arcade */
+/* 📁 Panel lateral Sidebar Aero Frosted */
 .p-sidebar {
-  background: #0e0420 !important;
-  border-right: 3px solid var(--retro-neon-pink) !important;
-  box-shadow: 0 0 25px rgba(255, 0, 127, 0.4) !important;
+  background: rgba(255, 255, 255, 0.88) !important;
+  backdrop-filter: blur(22px) saturate(190%) !important;
+  -webkit-backdrop-filter: blur(22px) saturate(190%) !important;
+  border-right: 1px solid rgba(255, 255, 255, 0.9) !important;
+  box-shadow: 10px 0 35px rgba(2, 132, 199, 0.12) !important;
 }
 
 .p-sidebar .p-sidebar-header {
-  border-bottom: 2px dashed rgba(0, 255, 204, 0.4) !important;
-  padding-bottom: 1rem !important;
+  border-bottom: 1px solid rgba(186, 230, 253, 0.6) !important;
+  padding: 1.25rem !important;
 }
 
-/* Indicador parpadeante HUD */
+/* ✨ Animaciones y Utilidades Frutiger Aero */
+.aero-orb {
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.9) 0%, rgba(56, 189, 248, 0.7) 40%, rgba(2, 132, 199, 0.9) 100%);
+  box-shadow: 0 4px 15px rgba(2, 132, 199, 0.4), inset -2px -2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.aero-badge-pill {
+  background: rgba(255, 255, 255, 0.65);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  box-shadow: 0 2px 10px rgba(2, 132, 199, 0.1), inset 0 1px 1px rgba(255, 255, 255, 0.8);
+  border-radius: 999px;
+  padding: 0.35rem 0.85rem;
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: var(--aero-sky-dark);
+}
+
 .arcade-blink-text {
-  animation: arcadeTextBlink 1.2s infinite steps(2, start);
+  animation: aeroGlowPulse 2.4s ease-in-out infinite;
 }
 
-@keyframes arcadeTextBlink {
-  0%, 49% { opacity: 1; }
-  50%, 100% { opacity: 0.2; }
+@keyframes aeroGlowPulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.75; transform: scale(1.03); }
 }

@@ -13,96 +13,96 @@ import {
   CartridgeSprite,
 } from '../components/RetroSprites';
 
-// Promociones publicitarias destacadas de cartuchos retro
+// Títulos y catálogo destacado
 const PROMO_GAMES = [
   {
     id: 1,
-    title: 'SUPER MARIO 16-BIT QUEST',
-    console: 'SNES / SUPER NINTENDO',
-    badge: 'ESTRENO DEL MES',
+    title: 'Super Mario 16-Bit Quest',
+    console: 'SNES / Super Nintendo',
+    badge: 'ESTRENO DESTACADO',
     badgeColor: 'warning',
-    headline: '¡LA MAYOR AVENTURA DEL FONTANERO EN TU TELEVISOR!',
-    description: 'Nuevos mundos secretos, capa voladora, y por primera vez monta al dinosaurio Yoshi. ¡Revive la magia de los 16-bits!',
-    rating: '★★★★★ 10/10',
+    headline: 'La mayor aventura clásica en alta definición',
+    description: 'Mundos secretos, capa voladora y recorridos clásicos. La cumbre de la época dorada de los 16-bits.',
+    rating: '★ 9.9 / 10',
     salePrice: '$29.99',
     rentPrice: '$2.00 / día',
-    promoDeal: '🔥 PROMO 3x2: Renta 3 días y paga solo 2',
-    cartridgeColor: '#FF007F',
+    promoDeal: '✨ PROMO 3x2: Renta 3 días y paga solo 2',
+    cartridgeColor: '#0284c7',
     iconType: 'mario',
   },
   {
     id: 2,
-    title: 'ZELDA: A LINK TO THE PAST',
-    console: 'SNES / 16-BIT CLASSIC',
+    title: 'Zelda: A Link to the Past',
+    console: 'SNES / 16-Bit Masterpiece',
     badge: 'OBRA MAESTRA',
     badgeColor: 'success',
-    headline: 'UNA AVENTURA ÉPICA QUE DEFINIÓ A UNA GENERACIÓN',
-    description: 'Viaja entre el Mundo de la Luz y el Mundo de la Oscuridad con la Espada Maestra para rescatar a las 7 doncellas.',
-    rating: '★★★★★ 10/10',
+    headline: 'Una aventura épica y atemporal',
+    description: 'Viaja entre dimensiones para restaurar la paz en Hyrule con la Espada Maestra y objetos legendarios.',
+    rating: '★ 10.0 / 10',
     salePrice: '$34.99',
     rentPrice: '$2.50 / día',
     promoDeal: '⚡ FIN DE SEMANA RPG: Renta de viernes a lunes por $5.00',
-    cartridgeColor: '#FFE600',
+    cartridgeColor: '#10b981',
     iconType: 'zelda',
   },
   {
     id: 3,
-    title: 'SPACE INVADERS & GALAGA DELUXE',
-    console: 'ARCADE VAULT / NES',
+    title: 'Space Invaders & Galaga Deluxe',
+    console: 'Arcade Classics / NES',
     badge: 'CLÁSICO INMORTAL',
     badgeColor: 'info',
-    headline: '¡DEFIENDE LA TIERRA CONTRA LAS HORDAS ALIENÍGENAS!',
-    description: 'La experiencia definitiva de disparos espaciales. Reflejos rápidos, oleadas infinitas y puntuaciones de récord.',
-    rating: '★★★★★ 9.8/10',
+    headline: 'Defensa planetaria y reflejos puros',
+    description: 'La experiencia definitiva de batallas en el espacio sideral. Oleadas infinitas y puntuaciones récord.',
+    rating: '★ 9.8 / 10',
     salePrice: '$19.99',
     rentPrice: '$1.50 / día',
-    promoDeal: '👾 DESCUENTO FLASH: -25% en compra de cartucho',
-    cartridgeColor: '#00FFCC',
+    promoDeal: '💎 DESCUENTO ESPECIAL: -20% en compra directa',
+    cartridgeColor: '#06b6d4',
     iconType: 'ship',
   },
   {
     id: 4,
-    title: 'PAC-MANIA: LABERINTO CYBER',
-    console: 'ARCADE CLASSIC / SEGA',
-    badge: 'TOP 1 RENTAS',
+    title: 'Pac-Mania: Laberinto Cristalino',
+    console: 'Arcade Classic / SEGA',
+    badge: 'MÁS ALQUILADO',
     badgeColor: 'warning',
-    headline: '¡COME PUNTOS, ESQUIVA FANTASMAS Y GANA PREMIOS!',
-    description: 'El clásico devorador de laberintos con perspectiva isométrica. ¡No dejes que Blinky y Clyde te alcancen!',
-    rating: '★★★★★ 9.9/10',
+    headline: 'Esquiva fantasmas y consigue gemas de récord',
+    description: 'El legendario arcade con perspectiva isométrica y modos de velocidad mejorada para toda la familia.',
+    rating: '★ 9.7 / 10',
     salePrice: '$21.99',
     rentPrice: '$1.50 / día',
-    promoDeal: '🟡 PROMO 24 HORAS: Renta por solo $1.00 hoy',
-    cartridgeColor: '#FFE600',
+    promoDeal: '🌟 ALQUILER EXPRESS: Solo $1.00 por 24 horas',
+    cartridgeColor: '#f59e0b',
     iconType: 'pacman',
   },
   {
     id: 5,
-    title: 'STREET FIGHTER II: TURBO',
-    console: 'CAPCOM / SNES 16-BIT',
-    badge: 'TORNEO 2 PLAYERS',
+    title: 'Street Fighter II: Turbo',
+    console: 'Capcom / 16-Bit Edition',
+    badge: 'TORNEO VERSUS',
     badgeColor: 'danger',
-    headline: '¡HADOUKEN! EL REY DE LOS COMBATES LLEGA AL SALÓN',
-    description: '12 guerreros mundiales, velocidad turbo x4 y combos legendarios. Renta dos controles y reta a tus amigos.',
-    rating: '★★★★★ 10/10',
+    headline: 'El rey absoluto de las artes marciales',
+    description: '12 luchadores mundiales, velocidad de torneo y combos legendarios listos para retar a tus amigos.',
+    rating: '★ 9.9 / 10',
     salePrice: '$27.99',
     rentPrice: '$2.00 / día',
-    promoDeal: '🥊 COMBO VERSUS: Renta el juego + control extra gratis',
-    cartridgeColor: '#FF007F',
+    promoDeal: '🥊 COMBO DÚO: Renta el título y llévate mando extra',
+    cartridgeColor: '#ef4444',
     iconType: 'fighter',
   },
   {
     id: 6,
-    title: 'SONIC THE HEDGEHOG 2',
-    console: 'SEGA GENESIS / MEGA DRIVE',
+    title: 'Sonic the Hedgehog 2',
+    console: 'Sega Genesis / Mega Drive',
     badge: 'VELOCIDAD PURA',
     badgeColor: 'info',
-    headline: '¡SEGA HACE LO QUE NINTENDON\'T! VELOCIDAD TOTAL',
-    description: 'Corre a la velocidad de la luz junto a Tails para detener los planes del malvado Dr. Robotnik en las zonas secretas.',
-    rating: '★★★★★ 9.9/10',
+    headline: 'Velocidad ultrasónica en mundos cristalinos',
+    description: 'Corre a velocidad relámpago con Sonic y Tails para salvar animales y recolectar las gemas del caos.',
+    rating: '★ 9.9 / 10',
     salePrice: '$24.99',
     rentPrice: '$1.80 / día',
-    promoDeal: '🌀 EDICIÓN COMPLETA: Cartucho original + póster retro',
-    cartridgeColor: '#00FFCC',
+    promoDeal: '🌀 EDICIÓN COMPLETA: Cartucho original probado',
+    cartridgeColor: '#0ea5e9',
     iconType: 'sonic',
   },
 ];
@@ -118,71 +118,78 @@ export const DashboardPage = () => {
 
   return (
     <div className="flex flex-column gap-4">
-      {/* 🚀 GRAN MARQUESINA PUBLICITARIA HERO ESTILO REVISTA NINTENDO POWER / SEGA */}
+      {/* 🚀 BANNER HERO AERO GLASSMORPHISM */}
       <div
-        className="surface-card border-round p-4 md:p-5 relative overflow-hidden"
+        className="surface-card border-round-3xl p-4 md:p-5 relative overflow-hidden"
         style={{
-          border: '3px solid #FFE600',
-          boxShadow: '0 0 25px rgba(255, 230, 0, 0.4), inset 0 0 20px rgba(255, 0, 127, 0.25)',
-          background: 'radial-gradient(ellipse at 80% 20%, #3d0d5e 0%, #170533 50%, #090217 100%)',
+          background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.85) 0%, rgba(224, 242, 254, 0.75) 50%, rgba(186, 230, 253, 0.6) 100%)',
+          border: '1px solid rgba(255, 255, 255, 0.95)',
+          boxShadow: '0 20px 45px -10px rgba(2, 132, 199, 0.2), inset 0 1px 2px #fff',
         }}
       >
         <div className="grid align-items-center">
           <div className="col-12 lg:col-8 z-2">
-            <div className="flex align-items-center gap-2 mb-2">
-              <span className="arcade-blink-text" style={{ fontSize: '1.2rem' }}>🔥</span>
+            <div className="flex align-items-center gap-2 mb-3">
+              <span className="arcade-blink-text" style={{ fontSize: '1.25rem' }}>✨</span>
               <span
-                className="arcade-font-pixel text-xs px-2 py-1 border-round"
-                style={{ background: '#FF007F', color: '#FFF', letterSpacing: '1px' }}
+                className="text-xs px-3 py-1 border-round-3xl font-bold"
+                style={{
+                  background: 'linear-gradient(180deg, #38bdf8 0%, #0284c7 100%)',
+                  color: '#FFF',
+                  letterSpacing: '0.04em',
+                  boxShadow: '0 2px 6px rgba(2, 132, 199, 0.3)',
+                }}
               >
-                PROMO ESTRELLA DEL VIDEO CLUB
+                TERMINAL POS PROFESIONAL
               </span>
-              <span style={{ fontFamily: "'VT323', monospace", fontSize: '1.3rem', color: '#00FFCC' }}>
-                EDICIÓN LIMITADA 16-BITS
+              <span style={{ fontSize: '0.85rem', color: '#0369a1', fontWeight: 600 }}>
+                Edición Frutiger Aero
               </span>
             </div>
 
             <h1
-              className="arcade-font-pixel text-2xl md:text-3xl m-0 mb-3"
+              className="text-3xl md:text-4xl m-0 mb-3"
               style={{
-                color: '#FFE600',
-                textShadow: '3px 3px 0 #FF007F, -1px -1px 0 #00FFCC',
-                lineHeight: '1.3',
+                fontFamily: "'Outfit', sans-serif",
+                fontWeight: 800,
+                color: '#0f172a',
+                lineHeight: '1.2',
+                letterSpacing: '-0.03em',
               }}
             >
-              ¡REVIVE LA GLORIA DE LOS CARTUCHOS CLÁSICOS!
+              Gestión Integral de Cartuchos, Ventas y Rentas
             </h1>
 
             <p
               className="m-0 mb-4"
               style={{
-                fontFamily: "'VT323', monospace",
-                fontSize: '1.45rem',
-                color: '#E0D5FF',
-                lineHeight: '1.4',
+                fontSize: '1.05rem',
+                color: '#334155',
+                lineHeight: '1.6',
                 maxWidth: '650px',
               }}
             >
-              Renta tus títulos favoritos desde <strong style={{ color: '#00FFCC' }}>$1.50/día</strong> o cómpralos para tu colección personal.
-              ¡Disfruta los fines de semana con la promo <strong>3x2 en alquiler de juegos</strong>!
+              Controla inventarios con precisión cristalina. Renta títulos clásicos desde{' '}
+              <strong style={{ color: '#0284c7' }}>$1.50/día</strong> o realiza ventas directas con
+              facturación instantánea y promociones automáticas.
             </p>
 
             <div className="flex flex-wrap gap-3 align-items-center">
               <Button
-                label="🛒 COMPRAR CARTUCHOS"
+                label="Comprar Cartuchos"
                 icon="pi pi-shopping-cart"
                 size="large"
                 onClick={() => handleAction(ROUTES.COMPRAR)}
               />
               <Button
-                label="🕹️ RENTAR POR DÍA"
+                label="Rentar por Día"
                 icon="pi pi-clock"
                 size="large"
                 outlined
                 onClick={() => handleAction(ROUTES.RENTAR)}
               />
               <Button
-                label="📦 VER TODO EL CATÁLOGO"
+                label="Ver Catálogo Completo"
                 icon="pi pi-box"
                 size="large"
                 text
@@ -191,70 +198,70 @@ export const DashboardPage = () => {
             </div>
           </div>
 
-          {/* Ilustraciones gigantes de videojuegos y naves */}
+          {/* Ilustración de cristal Aero */}
           <div className="col-12 lg:col-4 text-center z-2 mt-4 lg:mt-0">
             <div
-              className="p-4 border-round inline-block"
+              className="p-4 border-round-3xl inline-block"
               style={{
-                background: 'rgba(10, 3, 25, 0.85)',
-                border: '2px dashed #00FFCC',
-                boxShadow: '0 0 20px rgba(0, 255, 204, 0.4)',
+                background: 'rgba(255, 255, 255, 0.75)',
+                backdropFilter: 'blur(16px)',
+                border: '1px solid rgba(255, 255, 255, 0.95)',
+                boxShadow: '0 12px 30px rgba(2, 132, 199, 0.15)',
               }}
             >
               <div className="flex justify-content-center align-items-center gap-3 mb-2">
-                <SpaceShipSprite size={48} />
-                <CartridgeSprite size={60} color="#FFE600" />
-                <PacmanSprite size={48} />
+                <SpaceShipSprite size={46} />
+                <CartridgeSprite size={60} color="#0284c7" />
+                <PacmanSprite size={46} />
               </div>
 
               <div
-                className="arcade-font-pixel text-xs mt-2"
-                style={{ color: '#FFE600', letterSpacing: '1px' }}
+                className="font-bold text-sm mt-2"
+                style={{ color: '#0369a1', letterSpacing: '0.04em' }}
               >
-                100% ORIGINALES
+                100% FUNCIONALES Y PROBADOS
               </div>
-              <div style={{ fontFamily: "'VT323', monospace", fontSize: '1.25rem', color: '#00FFCC' }}>
+              <div style={{ fontSize: '0.82rem', color: '#64748b', fontWeight: 500 }}>
                 NES • SNES • SEGA • N64 • GAME BOY
               </div>
 
-              <div className="flex justify-content-center gap-2 mt-2">
-                <GhostSprite size={26} color="#FF0000" />
-                <GhostSprite size={26} color="#00FFCC" />
-                <GhostSprite size={26} color="#FF007F" />
-                <SpaceInvaderSprite size={26} color="#39FF14" />
+              <div className="flex justify-content-center gap-2 mt-3">
+                <GhostSprite size={24} color="#10b981" />
+                <GhostSprite size={24} color="#06b6d4" />
+                <SpaceInvaderSprite size={24} color="#0ea5e9" />
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      {/* 💥 BANNERS DE PROMOCIONES ESPECIALES (TICKETS DE OFERTA) */}
+      {/* 💥 TARJETAS DE PROMOCIONES ESPECIALES */}
       <div className="grid">
         <div className="col-12 md:col-4">
           <Card
-            className="h-full"
+            className="h-full border-round-2xl"
             style={{
-              border: '2px solid #39FF14',
-              boxShadow: '0 0 15px rgba(57, 255, 20, 0.3)',
+              background: 'linear-gradient(180deg, rgba(240, 253, 244, 0.8) 0%, rgba(255, 255, 255, 0.8) 100%)',
+              border: '1px solid rgba(187, 247, 208, 0.8)',
             }}
           >
             <div className="flex align-items-center gap-2 mb-2">
-              <span style={{ fontSize: '1.5rem' }}>🎁</span>
-              <span className="arcade-font-pixel text-xs" style={{ color: '#39FF14' }}>
-                PROMO FIN DE SEMANA
+              <span style={{ fontSize: '1.4rem' }}>🎁</span>
+              <span className="text-xs font-bold" style={{ color: '#15803d' }}>
+                PROMOCIÓN DE FIN DE SEMANA
               </span>
             </div>
-            <h3 className="arcade-font-pixel text-sm mb-2" style={{ color: '#FFE600' }}>
-              RENTAS 3x2 VIERNES A DOMINGO
+            <h3 className="text-base font-bold mb-2" style={{ color: '#0f172a' }}>
+              Rentas 3x2 Viernes a Domingo
             </h3>
-            <p style={{ fontFamily: "'VT323', monospace", fontSize: '1.25rem', color: '#E0D5FF', margin: '0 0 1rem 0' }}>
-              Elige 3 cartuchos cualesquiera para todo el fin de semana y paga solo 2. ¡Válido en todo el catálogo!
+            <p style={{ fontSize: '0.9rem', color: '#475569', margin: '0 0 1.25rem 0', lineHeight: 1.5 }}>
+              Elige 3 cartuchos de cualquier consola para el fin de semana y paga solo 2. Válido en todo el catálogo.
             </p>
             <Button
-              label="APROVECHAR 3x2"
+              label="Aprovechar 3x2"
               icon="pi pi-arrow-right"
               size="small"
-              className="w-full"
+              className="w-full p-button-success"
               onClick={() => handleAction(ROUTES.RENTAR)}
             />
           </Card>
@@ -262,26 +269,26 @@ export const DashboardPage = () => {
 
         <div className="col-12 md:col-4">
           <Card
-            className="h-full"
+            className="h-full border-round-2xl"
             style={{
-              border: '2px solid #FF007F',
-              boxShadow: '0 0 15px rgba(255, 0, 127, 0.3)',
+              background: 'linear-gradient(180deg, rgba(240, 249, 255, 0.8) 0%, rgba(255, 255, 255, 0.8) 100%)',
+              border: '1px solid rgba(186, 230, 253, 0.8)',
             }}
           >
             <div className="flex align-items-center gap-2 mb-2">
-              <span style={{ fontSize: '1.5rem' }}>⭐</span>
-              <span className="arcade-font-pixel text-xs" style={{ color: '#FF007F' }}>
+              <span style={{ fontSize: '1.4rem' }}>⭐</span>
+              <span className="text-xs font-bold" style={{ color: '#0284c7' }}>
                 CLUB SOCIO VIP
               </span>
             </div>
-            <h3 className="arcade-font-pixel text-sm mb-2" style={{ color: '#FFE600' }}>
-              PASE MENSUAL ILIMITADO
+            <h3 className="text-base font-bold mb-2" style={{ color: '#0f172a' }}>
+              Pase Mensual Ilimitado
             </h3>
-            <p style={{ fontFamily: "'VT323', monospace", fontSize: '1.25rem', color: '#E0D5FF', margin: '0 0 1rem 0' }}>
-              Por solo $14.99/mes, renta hasta 4 cartuchos simultáneos sin límite de días ni recargos por demora.
+            <p style={{ fontSize: '0.9rem', color: '#475569', margin: '0 0 1.25rem 0', lineHeight: 1.5 }}>
+              Por solo $14.99/mes, renta hasta 4 cartuchos simultáneos sin límite de días ni penalizaciones por demora.
             </p>
             <Button
-              label="REGISTRAR SOCIO"
+              label="Registrar Socio"
               icon="pi pi-user-plus"
               size="small"
               outlined
@@ -293,26 +300,26 @@ export const DashboardPage = () => {
 
         <div className="col-12 md:col-4">
           <Card
-            className="h-full"
+            className="h-full border-round-2xl"
             style={{
-              border: '2px solid #00FFCC',
-              boxShadow: '0 0 15px rgba(0, 255, 204, 0.3)',
+              background: 'linear-gradient(180deg, rgba(254, 243, 199, 0.7) 0%, rgba(255, 255, 255, 0.8) 100%)',
+              border: '1px solid rgba(253, 230, 138, 0.8)',
             }}
           >
             <div className="flex align-items-center gap-2 mb-2">
-              <span style={{ fontSize: '1.5rem' }}>🪙</span>
-              <span className="arcade-font-pixel text-xs" style={{ color: '#00FFCC' }}>
-                VENTA LIQUIDACIÓN
+              <span style={{ fontSize: '1.4rem' }}>💎</span>
+              <span className="text-xs font-bold" style={{ color: '#b45309' }}>
+                VENTA POR LIQUIDACIÓN
               </span>
             </div>
-            <h3 className="arcade-font-pixel text-sm mb-2" style={{ color: '#FFE600' }}>
-              HASTA -40% EN COMPRAS
+            <h3 className="text-base font-bold mb-2" style={{ color: '#0f172a' }}>
+              Hasta -40% en Compras
             </h3>
-            <p style={{ fontFamily: "'VT323', monospace", fontSize: '1.25rem', color: '#E0D5FF', margin: '0 0 1rem 0' }}>
-              Llévate cartuchos retro clásicos listos para jugar desde $9.99 con garantía de funcionamiento total.
+            <p style={{ fontSize: '0.9rem', color: '#475569', margin: '0 0 1.25rem 0', lineHeight: 1.5 }}>
+              Adquiere cartuchos retro clásicos listos para jugar desde $9.99 con garantía total de funcionamiento.
             </p>
             <Button
-              label="VER OFERTAS"
+              label="Ver Ofertas de Compra"
               icon="pi pi-shopping-bag"
               size="small"
               className="w-full"
@@ -322,36 +329,36 @@ export const DashboardPage = () => {
         </div>
       </div>
 
-      {/* 🎮 CATÁLOGO DE PUBLICIDADES Y CARTUCHOS DESTACADOS */}
-      <div className="surface-card border-round p-3 flex justify-content-between align-items-center flex-wrap gap-2">
+      {/* 🎮 FILTRO Y CABECERA DEL CATÁLOGO DESTACADO */}
+      <div className="surface-card border-round-2xl p-3 flex justify-content-between align-items-center flex-wrap gap-2">
         <div className="flex align-items-center gap-2">
-          <span style={{ fontSize: '1.5rem' }}>📺</span>
-          <span className="arcade-font-pixel text-sm" style={{ color: '#FFE600' }}>
-            PUBLICIDADES Y CARTUCHOS DESTACADOS
+          <span style={{ fontSize: '1.3rem' }}>🎮</span>
+          <span className="font-bold text-sm md:text-base" style={{ color: '#0369a1' }}>
+            TÍTULOS Y CARTUCHOS DESTACADOS
           </span>
         </div>
 
         <div className="flex gap-2 flex-wrap">
           <Button
-            label="TODOS"
+            label="Todos"
             size="small"
             outlined={filterCategory !== 'ALL'}
             onClick={() => setFilterCategory('ALL')}
           />
           <Button
-            label="SNES 16-BIT"
+            label="SNES 16-Bit"
             size="small"
             outlined={filterCategory !== 'SNES'}
             onClick={() => setFilterCategory('SNES')}
           />
           <Button
-            label="ARCADE"
+            label="Arcade"
             size="small"
             outlined={filterCategory !== 'ARCADE'}
             onClick={() => setFilterCategory('ARCADE')}
           />
           <Button
-            label="SEGA"
+            label="Sega"
             size="small"
             outlined={filterCategory !== 'SEGA'}
             onClick={() => setFilterCategory('SEGA')}
@@ -359,91 +366,83 @@ export const DashboardPage = () => {
         </div>
       </div>
 
-      {/* Grid de Posters y Anuncios de Cartuchos */}
+      {/* Grid de Cartuchos en Estilo Aero Glass */}
       <div className="grid">
         {PROMO_GAMES.filter((g) => {
           if (filterCategory === 'ALL') return true;
           return g.console.includes(filterCategory);
         }).map((game) => (
           <div key={game.id} className="col-12 lg:col-6">
-            <Card
-              className="h-full transition-transform transition-duration-150 hover:scale-101"
-              style={{
-                border: '2px solid rgba(0, 255, 204, 0.5)',
-                background: 'linear-gradient(135deg, rgba(25, 8, 52, 0.95) 0%, rgba(10, 3, 24, 0.95) 100%)',
-              }}
-            >
+            <Card className="h-full border-round-2xl transition-transform transition-duration-150 hover:scale-101">
               <div className="flex flex-column sm:flex-row gap-4 align-items-start">
-                {/* Ilustración o sprite del cartucho */}
+                {/* Ilustración cristalina del cartucho */}
                 <div
-                  className="flex flex-column align-items-center justify-content-center p-3 border-round w-full sm:w-10rem"
+                  className="flex flex-column align-items-center justify-content-center p-3 border-round-2xl w-full sm:w-10rem"
                   style={{
-                    background: 'rgba(8, 2, 20, 0.9)',
-                    border: `2px solid ${game.cartridgeColor}`,
-                    boxShadow: `0 0 15px ${game.cartridgeColor}44`,
+                    background: 'linear-gradient(135deg, rgba(224, 242, 254, 0.7) 0%, rgba(240, 249, 255, 0.7) 100%)',
+                    border: '1px solid rgba(186, 230, 253, 0.9)',
+                    boxShadow: '0 4px 12px rgba(2, 132, 199, 0.1)',
                   }}
                 >
-                  <CartridgeSprite size={70} color={game.cartridgeColor} />
+                  <CartridgeSprite size={65} color={game.cartridgeColor} />
 
                   <div className="mt-2 flex align-items-center gap-1">
-                    {game.iconType === 'ship' && <SpaceShipSprite size={24} />}
-                    {game.iconType === 'pacman' && <PacmanSprite size={24} />}
-                    {game.iconType === 'mario' && <span style={{ fontSize: '1.4rem' }}>🍄</span>}
-                    {game.iconType === 'zelda' && <span style={{ fontSize: '1.4rem' }}>⚔️</span>}
-                    {game.iconType === 'fighter' && <span style={{ fontSize: '1.4rem' }}>🥊</span>}
-                    {game.iconType === 'sonic' && <span style={{ fontSize: '1.4rem' }}>🌀</span>}
+                    {game.iconType === 'ship' && <SpaceShipSprite size={22} />}
+                    {game.iconType === 'pacman' && <PacmanSprite size={22} />}
+                    {game.iconType === 'mario' && <span style={{ fontSize: '1.25rem' }}>🍄</span>}
+                    {game.iconType === 'zelda' && <span style={{ fontSize: '1.25rem' }}>⚔️</span>}
+                    {game.iconType === 'fighter' && <span style={{ fontSize: '1.25rem' }}>🥊</span>}
+                    {game.iconType === 'sonic' && <span style={{ fontSize: '1.25rem' }}>🌀</span>}
                   </div>
 
                   <span
-                    className="mt-2 text-center text-xs"
-                    style={{ fontFamily: "'Press Start 2P', monospace", color: '#FFE600', fontSize: '0.52rem' }}
+                    className="mt-2 text-center text-xs font-semibold"
+                    style={{ color: '#0369a1' }}
                   >
                     {game.console}
                   </span>
                 </div>
 
-                {/* Contenido publicitario del juego */}
+                {/* Contenido comercial */}
                 <div className="flex-1 flex flex-column justify-content-between h-full">
                   <div>
                     <div className="flex justify-content-between align-items-center gap-2 mb-2">
                       <Tag severity={game.badgeColor} value={game.badge} />
-                      <span style={{ fontFamily: "'VT323', monospace", fontSize: '1.2rem', color: '#FFE600' }}>
+                      <span style={{ fontSize: '0.85rem', color: '#f59e0b', fontWeight: 700 }}>
                         {game.rating}
                       </span>
                     </div>
 
                     <h3
-                      className="arcade-font-pixel text-base m-0 mb-1"
-                      style={{ color: '#FFE600', textShadow: '1px 1px 0 #FF007F' }}
+                      className="text-lg font-bold m-0 mb-1"
+                      style={{ color: '#0f172a' }}
                     >
                       {game.title}
                     </h3>
 
                     <h4
-                      className="m-0 mb-2"
-                      style={{ fontFamily: "'VT323', monospace", fontSize: '1.3rem', color: '#00FFCC' }}
+                      className="m-0 mb-2 font-semibold text-sm"
+                      style={{ color: '#0284c7' }}
                     >
                       {game.headline}
                     </h4>
 
                     <p
-                      className="m-0 mb-3"
-                      style={{ fontFamily: "'VT323', monospace", fontSize: '1.2rem', color: '#D4C9F0', lineHeight: '1.3' }}
+                      className="m-0 mb-3 text-sm"
+                      style={{ color: '#64748b', lineHeight: '1.4' }}
                     >
                       {game.description}
                     </p>
                   </div>
 
-                  {/* Banner de oferta y botones */}
+                  {/* Banner de oferta y precios */}
                   <div className="border-top-1 surface-border pt-2 mt-auto">
                     <div
-                      className="p-2 border-round mb-3"
+                      className="p-2 border-round-xl mb-3 text-xs font-semibold"
                       style={{
-                        background: 'rgba(255, 230, 0, 0.1)',
-                        border: '1px dashed #FFE600',
-                        fontFamily: "'VT323', monospace",
-                        fontSize: '1.15rem',
-                        color: '#FFE600',
+                        background: 'rgba(240, 249, 255, 0.8)',
+                        border: '1px solid rgba(186, 230, 253, 0.8)',
+                        color: '#0369a1',
                       }}
                     >
                       {game.promoDeal}
@@ -451,22 +450,30 @@ export const DashboardPage = () => {
 
                     <div className="flex justify-content-between align-items-center mb-3">
                       <div>
-                        <span className="text-xs block" style={{ fontFamily: "'VT323', monospace", color: '#A89BC9' }}>
-                          VENTA CARTUCHO
+                        <span className="text-xs block text-500 font-semibold">
+                          PRECIO VENTA
                         </span>
                         <strong
-                          style={{ fontFamily: "'Press Start 2P', monospace", fontSize: '0.9rem', color: '#39FF14' }}
+                          style={{
+                            fontFamily: "'Outfit', sans-serif",
+                            fontSize: '1.25rem',
+                            color: '#15803d',
+                          }}
                         >
                           {game.salePrice}
                         </strong>
                       </div>
 
                       <div className="text-right">
-                        <span className="text-xs block" style={{ fontFamily: "'VT323', monospace", color: '#A89BC9' }}>
-                          ALQUILER
+                        <span className="text-xs block text-500 font-semibold">
+                          ALQUILER DIARIO
                         </span>
                         <strong
-                          style={{ fontFamily: "'Press Start 2P', monospace", fontSize: '0.9rem', color: '#00FFCC' }}
+                          style={{
+                            fontFamily: "'Outfit', sans-serif",
+                            fontSize: '1.25rem',
+                            color: '#0284c7',
+                          }}
                         >
                           {game.rentPrice}
                         </strong>
@@ -475,14 +482,14 @@ export const DashboardPage = () => {
 
                     <div className="flex gap-2">
                       <Button
-                        label="🛒 COMPRAR"
+                        label="Comprar"
                         icon="pi pi-shopping-cart"
                         size="small"
                         className="flex-1"
                         onClick={() => handleAction(ROUTES.COMPRAR)}
                       />
                       <Button
-                        label="🕹️ RENTAR"
+                        label="Rentar"
                         icon="pi pi-clock"
                         size="small"
                         outlined

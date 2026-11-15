@@ -1,6 +1,7 @@
-// 👾 COMPONENTES SVG PIXEL-ART: PACMAN, NAVES ESPACIALES Y CARTUCHOS RETRO
+// ✨ ICONOGRAFÍA E ILUSTRACIONES VECTORIALES ESTILO FRUTIGER AERO
+// Orbes translúcidos, reflejos de cristal, esferas de luz y acabados glossy Aqua
 
-export const PacmanSprite = ({ size = 32, animated = true, className = '' }) => (
+export const PacmanSprite = ({ size = 32, className = '' }) => (
   <svg
     width={size}
     height={size}
@@ -8,19 +9,29 @@ export const PacmanSprite = ({ size = 32, animated = true, className = '' }) => 
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
     className={className}
-    style={{ filter: 'drop-shadow(0 0 6px #ffe600)' }}
+    style={{ filter: 'drop-shadow(0 4px 10px rgba(2, 132, 199, 0.35))' }}
   >
-    {/* Pacman shape */}
-    <path
-      d="M12 2H20V4H24V8H26V10H28V14H24V16H20V18H24V22H28V24H26V26H24V28H20V30H12V28H8V26H6V24H4V20H2V12H4V8H6V6H8V4H12V2Z"
-      fill="#FFE600"
-    />
-    {/* Ojo pixel */}
-    <rect x="14" y="6" width="3" height="3" fill="#090214" />
+    <defs>
+      <linearGradient id="aeroOrbGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stopColor="#38bdf8" />
+        <stop offset="50%" stopColor="#0ea5e9" />
+        <stop offset="100%" stopColor="#0284c7" />
+      </linearGradient>
+      <linearGradient id="aeroOrbShine" x1="0%" y1="0%" x2="0%" y2="100%">
+        <stop offset="0%" stopColor="#ffffff" stopOpacity="0.85" />
+        <stop offset="100%" stopColor="#ffffff" stopOpacity="0.05" />
+      </linearGradient>
+    </defs>
+    {/* Esfera base translúcida */}
+    <circle cx="16" cy="16" r="14" fill="url(#aeroOrbGrad)" stroke="#bae6fd" strokeWidth="1" />
+    {/* Reflejo curvado superior de cristal */}
+    <ellipse cx="16" cy="10" rx="9" ry="5" fill="url(#aeroOrbShine)" />
+    {/* Destello de luz */}
+    <circle cx="11" cy="9" r="2" fill="#ffffff" opacity="0.9" />
   </svg>
 );
 
-export const GhostSprite = ({ size = 32, color = '#FF007F', className = '' }) => (
+export const GhostSprite = ({ size = 32, color = '#10b981', className = '' }) => (
   <svg
     width={size}
     height={size}
@@ -28,19 +39,28 @@ export const GhostSprite = ({ size = 32, color = '#FF007F', className = '' }) =>
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
     className={className}
-    style={{ filter: `drop-shadow(0 0 6px ${color})` }}
+    style={{ filter: 'drop-shadow(0 4px 10px rgba(16, 185, 129, 0.35))' }}
   >
-    {/* Cuerpo del fantasma */}
+    <defs>
+      <linearGradient id="emeraldAero" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stopColor="#6ee7b7" />
+        <stop offset="50%" stopColor="#10b981" />
+        <stop offset="100%" stopColor="#059669" />
+      </linearGradient>
+    </defs>
+    {/* Gota de agua esmeralda Aero */}
     <path
-      d="M10 2H22V4H26V8H28V26H26V30H24V26H20V30H18V26H14V30H12V26H8V30H6V26H4V8H6V4H10V2Z"
-      fill={color}
+      d="M16 4C16 4 7 15 7 21C7 26 11 30 16 30C21 30 25 26 25 21C25 15 16 4 16 4Z"
+      fill="url(#emeraldAero)"
+      stroke="#a7f3d0"
+      strokeWidth="1"
     />
-    {/* Ojos blancos */}
-    <rect x="8" y="10" width="6" height="8" fill="#FFFFFF" />
-    <rect x="18" y="10" width="6" height="8" fill="#FFFFFF" />
-    {/* Pupilas azules */}
-    <rect x="12" y="14" width="3" height="4" fill="#002288" />
-    <rect x="22" y="14" width="3" height="4" fill="#002288" />
+    {/* Reflejo de cristal curvado */}
+    <path
+      d="M16 7C14 11 10 17 10 21C10 22 10.5 23 11.5 23C13 23 15 17 16 7Z"
+      fill="#ffffff"
+      opacity="0.65"
+    />
   </svg>
 );
 
@@ -52,27 +72,25 @@ export const SpaceShipSprite = ({ size = 32, className = '' }) => (
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
     className={className}
-    style={{ filter: 'drop-shadow(0 0 8px #00ffcc)' }}
+    style={{ filter: 'drop-shadow(0 4px 12px rgba(14, 165, 233, 0.45))' }}
   >
-    {/* Galaga / Defender Starfighter */}
-    <rect x="15" y="2" width="2" height="6" fill="#00FFCC" />
-    <rect x="14" y="8" width="4" height="4" fill="#FFFFFF" />
-    <rect x="13" y="12" width="6" height="6" fill="#00FFCC" />
-    <rect x="11" y="14" width="2" height="6" fill="#FF007F" />
-    <rect x="19" y="14" width="2" height="6" fill="#FF007F" />
-    <rect x="8" y="18" width="3" height="8" fill="#FFFFFF" />
-    <rect x="21" y="18" width="3" height="8" fill="#FFFFFF" />
-    <rect x="5" y="22" width="3" height="6" fill="#00FFCC" />
-    <rect x="24" y="22" width="3" height="6" fill="#00FFCC" />
-    <rect x="2" y="26" width="3" height="4" fill="#FF007F" />
-    <rect x="27" y="26" width="3" height="4" fill="#FF007F" />
-    {/* Propulsor fuego */}
-    <rect x="14" y="24" width="4" height="4" fill="#FFE600" />
-    <rect x="15" y="28" width="2" height="3" fill="#FF4400" />
+    <defs>
+      <linearGradient id="shipAeroGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+        <stop offset="0%" stopColor="#ffffff" />
+        <stop offset="40%" stopColor="#38bdf8" />
+        <stop offset="100%" stopColor="#0284c7" />
+      </linearGradient>
+    </defs>
+    {/* Disco óptico holográfico / CD Aero */}
+    <circle cx="16" cy="16" r="13" fill="url(#shipAeroGrad)" stroke="#e0f2fe" strokeWidth="1.5" />
+    <circle cx="16" cy="16" r="5" fill="#f0f9ff" stroke="#38bdf8" strokeWidth="1" />
+    <circle cx="16" cy="16" r="2.5" fill="#ffffff" />
+    {/* Reflejo diagonal irisado */}
+    <path d="M7 16A9 9 0 0 1 25 16" stroke="#ffffff" strokeWidth="1.5" strokeLinecap="round" opacity="0.75" />
   </svg>
 );
 
-export const SpaceInvaderSprite = ({ size = 32, color = '#39FF14', className = '' }) => (
+export const SpaceInvaderSprite = ({ size = 32, color = '#06b6d4', className = '' }) => (
   <svg
     width={size}
     height={size}
@@ -80,20 +98,27 @@ export const SpaceInvaderSprite = ({ size = 32, color = '#39FF14', className = '
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
     className={className}
-    style={{ filter: `drop-shadow(0 0 6px ${color})` }}
+    style={{ filter: 'drop-shadow(0 4px 10px rgba(6, 182, 212, 0.35))' }}
   >
-    {/* Space Invader Crab */}
+    <defs>
+      <linearGradient id="cyanAeroSparkle" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stopColor="#a5f3fc" />
+        <stop offset="50%" stopColor="#06b6d4" />
+        <stop offset="100%" stopColor="#0891b2" />
+      </linearGradient>
+    </defs>
+    {/* Estrella cristalina / Destello de brillo Aero */}
     <path
-      d="M6 8H10V10H6V8ZM22 8H26V10H22V8ZM8 10H12V12H8V10ZM20 10H24V12H20V10ZM6 12H26V18H24V20H20V18H12V20H8V18H6V12ZM4 14H6V22H4V14ZM26 14H28V22H26V14ZM2 18H4V24H2V18ZM28 18H30V24H28V18ZM6 22H10V26H8V28H6V22ZM22 22H26V26H24V28H22V22Z"
-      fill={color}
+      d="M16 2L18.5 12L28.5 14.5L18.5 17L16 27L13.5 17L3.5 14.5L13.5 12L16 2Z"
+      fill="url(#cyanAeroSparkle)"
+      stroke="#ffffff"
+      strokeWidth="1"
     />
-    {/* Ojos */}
-    <rect x="10" y="14" width="3" height="3" fill="#090214" />
-    <rect x="19" y="14" width="3" height="3" fill="#090214" />
+    <circle cx="16" cy="14.5" r="2.5" fill="#ffffff" />
   </svg>
 );
 
-export const CartridgeSprite = ({ size = 36, color = '#A855F7', label = 'RETRO', className = '' }) => (
+export const CartridgeSprite = ({ size = 36, color = '#0284c7', label = 'AERO', className = '' }) => (
   <svg
     width={size}
     height={size}
@@ -101,17 +126,27 @@ export const CartridgeSprite = ({ size = 36, color = '#A855F7', label = 'RETRO',
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
     className={className}
-    style={{ filter: `drop-shadow(0 0 8px ${color})` }}
+    style={{ filter: 'drop-shadow(0 6px 14px rgba(2, 132, 199, 0.25))' }}
   >
-    {/* Carcasa plástica del cartucho */}
-    <rect x="4" y="4" width="32" height="30" rx="3" fill="#2A1B4E" stroke={color} strokeWidth="2" />
-    {/* Ranuras de ventilación superiores */}
-    <line x1="10" y1="8" x2="30" y2="8" stroke="#13082B" strokeWidth="2" />
-    <line x1="10" y1="12" x2="30" y2="12" stroke="#13082B" strokeWidth="2" />
-    {/* Etiqueta central del juego */}
-    <rect x="8" y="15" width="24" height="14" rx="1" fill="#FFE600" />
-    <rect x="10" y="17" width="20" height="10" fill="#FF007F" />
-    {/* Conectores dorados inferiores */}
-    <rect x="10" y="34" width="20" height="3" fill="#EAB308" />
+    <defs>
+      <linearGradient id="cartAeroBody" x1="0%" y1="0%" x2="0%" y2="100%">
+        <stop offset="0%" stopColor="#ffffff" />
+        <stop offset="50%" stopColor="#e0f2fe" />
+        <stop offset="100%" stopColor="#bae6fd" />
+      </linearGradient>
+      <linearGradient id="cartAeroLabel" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stopColor="#38bdf8" />
+        <stop offset="100%" stopColor="#0284c7" />
+      </linearGradient>
+    </defs>
+    {/* Carcasa de cristal pulcro redondeado */}
+    <rect x="5" y="4" width="30" height="31" rx="6" fill="url(#cartAeroBody)" stroke="#bae6fd" strokeWidth="1.5" />
+    {/* Reflejo curvado */}
+    <path d="M7 10C7 7.5 9 6 12 6H28C31 6 33 7.5 33 10V16C23 14 15 17 7 20V10Z" fill="#ffffff" opacity="0.6" />
+    {/* Etiqueta central aqua glossy */}
+    <rect x="8" y="16" width="24" height="13" rx="4" fill="url(#cartAeroLabel)" />
+    <circle cx="13" cy="22.5" r="2" fill="#ffffff" opacity="0.85" />
+    {/* Conector dorado inferior */}
+    <rect x="10" y="35" width="20" height="3" rx="1.5" fill="#f59e0b" />
   </svg>
 );
