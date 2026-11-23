@@ -7,14 +7,15 @@ import axios from 'axios';
 import { getItem, removeItem } from '../utils/storageUtil';
 import { AUTH_STORAGE_KEY } from '../constants/authConstants';
 
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://proyecto-final-1ong.onrender.com/api';
+
 const apiClient = axios.create({
-  // Gracias al proxy de Vite, /api/* se redirige a http://localhost:8080
-  baseURL: '/api',
+  baseURL: API_BASE_URL,
   headers: {
     'Content-Type': 'application/json',
     Accept: 'application/json',
   },
-  timeout: 10000,
+  timeout: 30000, // 30s de tolerancia ante cold starts de Render
 });
 
 // ── Interceptor de REQUEST ──────────────────────────────────────────────────

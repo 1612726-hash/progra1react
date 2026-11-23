@@ -17,9 +17,9 @@ export default defineConfig({
   server: {
     port: 5173,
     proxy: {
-      // Redirige todas las peticiones /api/* al backend Spring Boot
+      // Redirige peticiones /api al backend configurado o Render por defecto
       '/api': {
-        target: 'http://localhost:8080',
+        target: process.env.VITE_BACKEND_URL || 'https://proyecto-final-1ong.onrender.com',
         changeOrigin: true,
         secure: false,
       },
