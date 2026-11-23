@@ -6,7 +6,7 @@ import { AppRoutes } from './routes/AppRoutes';
 
 function App() {
   return (
-    <PrimeReactProvider value={{ ripple: true }}>
+    <PrimeReactProvider value={{ ripple: true, hideOverlaysOnDocumentScrolling: true }}>
       <ThemeProvider>
         <AuthProvider>
           <BrowserRouter>

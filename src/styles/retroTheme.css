@@ -338,8 +338,16 @@ h1, h2, h3, h4, h5, h6, .arcade-font-pixel {
 }
 
 /* 🪟 Ventanas Diálogo estilo Aero Glass Window */
+.p-dialog-mask {
+  background: rgba(15, 23, 42, 0.45) !important;
+  backdrop-filter: blur(4px) !important;
+  -webkit-backdrop-filter: blur(4px) !important;
+  position: fixed !important;
+  inset: 0 !important;
+}
+
 .p-dialog {
-  background: rgba(255, 255, 255, 0.88) !important;
+  background: rgba(255, 255, 255, 0.94) !important;
   backdrop-filter: blur(20px) saturate(190%) !important;
   -webkit-backdrop-filter: blur(20px) saturate(190%) !important;
   border: 1px solid rgba(255, 255, 255, 0.95) !important;
@@ -368,6 +376,33 @@ h1, h2, h3, h4, h5, h6, .arcade-font-pixel {
   background: rgba(248, 250, 252, 0.8) !important;
   border-top: 1px solid rgba(226, 232, 240, 0.8) !important;
   padding: 1rem 1.5rem !important;
+}
+
+/* 📋 Menús Desplegables Dropdown Overlay Aero */
+.p-dropdown-panel {
+  background: rgba(255, 255, 255, 0.96) !important;
+  backdrop-filter: blur(16px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(16px) saturate(180%) !important;
+  border: 1px solid rgba(186, 230, 253, 0.9) !important;
+  border-radius: 12px !important;
+  box-shadow: 0 12px 35px -5px rgba(2, 132, 199, 0.25), 0 0 0 1px rgba(255, 255, 255, 0.9) !important;
+  overflow: hidden !important;
+}
+
+.p-dropdown-panel .p-dropdown-items .p-dropdown-item {
+  padding: 0.65rem 1rem !important;
+  border-radius: 8px !important;
+  margin: 2px 4px !important;
+  color: #0f172a !important;
+  font-weight: 500 !important;
+  transition: all 0.15s ease !important;
+}
+
+.p-dropdown-panel .p-dropdown-items .p-dropdown-item:hover,
+.p-dropdown-panel .p-dropdown-items .p-dropdown-item.p-highlight {
+  background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%) !important;
+  color: #0369a1 !important;
+  font-weight: 600 !important;
 }
 
 /* 📁 Panel lateral Sidebar Aero Frosted */

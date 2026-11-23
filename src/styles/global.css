@@ -12,6 +12,14 @@ body,
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Bloqueo estricto del scroll del fondo cuando hay modales o diálogos abiertos */
+html.p-overflow-hidden,
+body.p-overflow-hidden {
+  overflow: hidden !important;
+  touch-action: none;
+  overscroll-behavior: contain !important;
+}
+
 * {
   box-sizing: border-box;
 }

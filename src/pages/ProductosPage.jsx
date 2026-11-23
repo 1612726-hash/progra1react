@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { Button } from 'primereact/button';
@@ -34,26 +34,67 @@ export const ProductosPage = () => {
   const [producto, setProducto] = useState(EMPTY_PRODUCTO);
   const [isEditing, setIsEditing] = useState(false);
   const [submitted, setSubmitted] = useState(false);
-  const [globalFilter, setGlobalFilter] = useState('');
-  const [searchBarcode, setSearchBarcode] = useState('');
+  const [searchTerm, setSearchTerm] = useState('');
+  const [appliedSearch, setAppliedSearch] = useState('');
+  const [totalRecords, setTotalRecords] = useState(0);
+
+  // Parámetros de paginación y ordenamiento en el servidor (Lazy)
+  const [lazyState, setLazyState] = useState({
+    first: 0,
+    rows: 10,
+    page: 0,
+    sortField: 'idProducto',
+    sortOrder: 1, // 1: asc, -1: desc
+  });
+
   const toastRef = useRef(null);
 
-  // ── Cargar productos y categorías ──────────────────────────────────────────
+  // ── Cargar categorías una sola vez ──────────────────────────────────────────
   const loadCategorias = async () => {
     try {
       const data = await categoriaService.getAll();
       setCategorias(data || []);
     } catch {
-      // En modo sin conexión o error de red
       setCategorias([]);
     }
   };
 
-  const loadProductos = async (catId = selectedCategoriaFilter) => {
+  useEffect(() => {
+    loadCategorias();
+  }, []);
+
+  // ── Carga paginada de productos desde el servidor ───────────────────────────
+  const loadProductos = useCallback(async () => {
     setLoading(true);
     try {
-      const data = await productoService.getAll(catId);
-      setProductos(data || []);
+      const sortDirection = lazyState.sortOrder === -1 ? 'desc' : 'asc';
+      const params = {
+        page: lazyState.page,
+        size: lazyState.rows,
+        sortField: lazyState.sortField || 'idProducto',
+        sortDirection: sortDirection,
+      };
+
+      if (selectedCategoriaFilter) {
+        params.categoriaId = selectedCategoriaFilter;
+      }
+
+      if (appliedSearch && appliedSearch.trim()) {
+        params.search = appliedSearch.trim();
+      }
+
+      const res = await productoService.getPaginated(params);
+
+      if (res && res.content) {
+        setProductos(res.content);
+        setTotalRecords(res.totalElements);
+      } else if (Array.isArray(res)) {
+        setProductos(res);
+        setTotalRecords(res.length);
+      } else {
+        setProductos([]);
+        setTotalRecords(0);
+      }
     } catch (err) {
       toastRef.current?.show({
         severity: 'error',
@@ -61,55 +102,52 @@ export const ProductosPage = () => {
         detail: err?.response?.data?.mensaje || 'No se pudieron cargar los productos',
         life: 3000,
       });
+      setProductos([]);
+      setTotalRecords(0);
     } finally {
       setLoading(false);
     }
-  };
+  }, [lazyState, selectedCategoriaFilter, appliedSearch]);
 
   useEffect(() => {
-    loadCategorias();
     loadProductos();
-  }, []);
+  }, [loadProductos]);
+
+  // ── Manejadores de eventos de la tabla Lazy ────────────────────────────────
+  const onPage = (event) => {
+    setLazyState(prev => ({
+      ...prev,
+      first: event.first,
+      rows: event.rows,
+      page: event.page,
+    }));
+  };
+
+  const onSort = (event) => {
+    setLazyState(prev => ({
+      ...prev,
+      sortField: event.sortField,
+      sortOrder: event.sortOrder,
+    }));
+  };
 
   const handleCategoriaFilterChange = (catId) => {
     setSelectedCategoriaFilter(catId);
-    loadProductos(catId);
+    setLazyState(prev => ({ ...prev, first: 0, page: 0 }));
   };
 
-  // ── Búsqueda directa por código de barras ──────────────────────────────────
-  const handleSearchByBarcode = async () => {
-    if (!searchBarcode.trim()) {
-      loadProductos(selectedCategoriaFilter);
-      return;
-    }
-    setLoading(true);
-    try {
-      const item = await productoService.getByCodigo(searchBarcode.trim());
-      if (item) {
-        setProductos([item]);
-        toastRef.current?.show({
-          severity: 'info',
-          summary: 'Encontrado',
-          detail: `Producto: ${item.nombre}`,
-          life: 2000,
-        });
-      } else {
-        setProductos([]);
-      }
-    } catch {
-      toastRef.current?.show({
-        severity: 'warn',
-        summary: 'No encontrado',
-        detail: `No existe producto con código ${searchBarcode}`,
-        life: 3000,
-      });
-      setProductos([]);
-    } finally {
-      setLoading(false);
-    }
+  const handleSearchSubmit = () => {
+    setAppliedSearch(searchTerm.trim());
+    setLazyState(prev => ({ ...prev, first: 0, page: 0 }));
   };
 
-  // ── Abrir diálogo ──────────────────────────────────────────────────────────
+  const handleSearchClear = () => {
+    setSearchTerm('');
+    setAppliedSearch('');
+    setLazyState(prev => ({ ...prev, first: 0, page: 0 }));
+  };
+
+  // ── Abrir diálogo de crear / editar ─────────────────────────────────────────
   const openNew = () => {
     setProducto(EMPTY_PRODUCTO);
     setIsEditing(false);
@@ -173,7 +211,7 @@ export const ProductosPage = () => {
         });
       }
       hideDialog();
-      loadProductos(selectedCategoriaFilter);
+      loadProductos();
     } catch (err) {
       toastRef.current?.show({
         severity: 'error',
@@ -203,7 +241,7 @@ export const ProductosPage = () => {
             detail: 'Producto eliminado correctamente',
             life: 2000,
           });
-          loadProductos(selectedCategoriaFilter);
+          loadProductos();
         } catch {
           toastRef.current?.show({
             severity: 'error',
@@ -260,6 +298,7 @@ export const ProductosPage = () => {
     </div>
   );
 
+  // ── Encabezado de la Tabla ─────────────────────────────────────────────────
   const header = (
     <div className="flex flex-column gap-3">
       <div className="flex justify-content-between align-items-center flex-wrap gap-2">
@@ -268,6 +307,11 @@ export const ProductosPage = () => {
           <span className="font-bold text-lg" style={{ color: '#0369a1' }}>
             Inventario de Productos y Cartuchos
           </span>
+          <Tag
+            value={`${totalRecords.toLocaleString()} registrados`}
+            severity="info"
+            className="ml-2"
+          />
         </div>
         <Button
           label="Nuevo Producto"
@@ -284,45 +328,45 @@ export const ProductosPage = () => {
           {/* Filtro por Categoría */}
           <Dropdown
             value={selectedCategoriaFilter}
-            options={[{ label: 'Todas las categorías', value: null }, ...categorias.map(c => ({ label: c.nombre, value: c.id }))]}
+            options={[
+              { label: 'Todas las categorías', value: null },
+              ...categorias.map(c => ({ label: c.nombre, value: c.id }))
+            ]}
             onChange={(e) => handleCategoriaFilterChange(e.value)}
             placeholder="Filtrar por categoría"
-            className="w-14rem"
+            className="w-16rem"
           />
 
-          {/* Búsqueda por Código de Barras */}
-          <div className="p-inputgroup w-16rem">
+          {/* Búsqueda por Nombre o Código (Server-side) */}
+          <div className="p-inputgroup w-20rem">
             <InputText
-              placeholder="Código de barras..."
-              value={searchBarcode}
-              onChange={(e) => setSearchBarcode(e.target.value)}
-              onKeyDown={(e) => e.key === 'Enter' && handleSearchByBarcode()}
+              placeholder="Buscar por nombre o código..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              onKeyDown={(e) => e.key === 'Enter' && handleSearchSubmit()}
             />
-            <Button icon="pi pi-search" onClick={handleSearchByBarcode} tooltip="Buscar código" />
-            {searchBarcode && (
+            <Button
+              icon="pi pi-search"
+              onClick={handleSearchSubmit}
+              tooltip="Buscar"
+            />
+            {searchTerm && (
               <Button
                 icon="pi pi-times"
                 severity="secondary"
                 text
-                onClick={() => {
-                  setSearchBarcode('');
-                  loadProductos(selectedCategoriaFilter);
-                }}
+                onClick={handleSearchClear}
+                tooltip="Limpiar búsqueda"
               />
             )}
           </div>
         </div>
 
-        {/* Filtro global */}
-        <span className="p-input-icon-left">
-          <i className="pi pi-filter" />
-          <InputText
-            placeholder="Filtro rápido..."
-            value={globalFilter}
-            onChange={(e) => setGlobalFilter(e.target.value)}
-            className="w-12rem"
-          />
-        </span>
+        {appliedSearch && (
+          <div className="text-sm text-500">
+            Filtrando por: <b>"{appliedSearch}"</b>
+          </div>
+        )}
       </div>
     </div>
   );
@@ -341,31 +385,74 @@ export const ProductosPage = () => {
 
       <DataTable
         value={productos}
+        lazy
+        paginator
+        first={lazyState.first}
+        rows={lazyState.rows}
+        totalRecords={totalRecords}
+        onPage={onPage}
+        onSort={onSort}
+        sortField={lazyState.sortField}
+        sortOrder={lazyState.sortOrder}
         loading={loading}
         header={header}
-        paginator
-        rows={10}
-        rowsPerPageOptions={[5, 10, 25]}
-        globalFilter={globalFilter}
+        rowsPerPageOptions={[10, 25, 50, 100]}
         emptyMessage="No se encontraron productos registrados"
         className="p-datatable-sm"
         stripedRows
       >
-        <Column field="idProducto" header="ID" sortable style={{ width: '4rem' }} body={(r) => r.idProducto || r.id} />
-        <Column field="codigo" header="Código" sortable body={(r) => r.codigo || r.codigoBarras} />
-        <Column field="nombre" header="Nombre del Producto" sortable />
-        <Column header="Categoría" body={categoriaTemplate} sortable />
-        <Column header="Precio" body={precioTemplate} sortable field="precio" />
-        <Column header="Existencia" body={stockTemplate} sortable field="existencia" />
-        <Column header="Acciones" body={actionTemplate} style={{ width: '7rem' }} />
+        <Column
+          field="idProducto"
+          header="ID"
+          sortable
+          style={{ width: '5rem' }}
+          body={(r) => r.idProducto || r.id}
+        />
+        <Column
+          field="codigo"
+          header="Código"
+          sortable
+          body={(r) => r.codigo || r.codigoBarras}
+        />
+        <Column
+          field="nombre"
+          header="Nombre del Producto"
+          sortable
+        />
+        <Column
+          field="categoria"
+          header="Categoría"
+          body={categoriaTemplate}
+          sortable
+        />
+        <Column
+          field="precio"
+          header="Precio"
+          body={precioTemplate}
+          sortable
+        />
+        <Column
+          field="existencia"
+          header="Existencia"
+          body={stockTemplate}
+          sortable
+        />
+        <Column
+          header="Acciones"
+          body={actionTemplate}
+          style={{ width: '7rem' }}
+        />
       </DataTable>
 
       {/* Diálogo Crear / Editar Producto */}
       <Dialog
         visible={dialogVisible}
-        style={{ width: '550px' }}
+        style={{ width: '550px', maxWidth: '95vw' }}
         header={isEditing ? 'Editar Producto' : 'Nuevo Producto'}
         modal
+        blockScroll
+        draggable={false}
+        resizable={false}
         onHide={hideDialog}
         footer={dialogFooter}
       >
@@ -380,7 +467,7 @@ export const ProductosPage = () => {
               value={producto.nombre}
               onChange={(e) => setProducto(prev => ({ ...prev, nombre: e.target.value }))}
               className={`w-full ${submitted && !producto.nombre?.trim() ? 'p-invalid' : ''}`}
-              placeholder="Ej. Arroz Blanco 1kg"
+              placeholder="Ej. Super Mario World"
             />
             {submitted && !producto.nombre?.trim() && (
               <small className="p-error">El nombre es requerido</small>
@@ -401,7 +488,7 @@ export const ProductosPage = () => {
                 codigoBarras: e.target.value,
               }))}
               className={`w-full ${submitted && !producto.codigo?.trim() ? 'p-invalid' : ''}`}
-              placeholder="Ej. 750100012345"
+              placeholder="Ej. PRD-00001"
             />
             {submitted && !producto.codigo?.trim() && (
               <small className="p-error">El código es requerido</small>

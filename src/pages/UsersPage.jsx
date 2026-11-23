@@ -524,9 +524,12 @@ export const UsersPage = () => {
       {/* Modal Comprobante / Factura Oficial en Estilo Aero Glass */}
       <Dialog
         visible={ticketDialogVisible}
-        style={{ width: '460px' }}
+        style={{ width: '460px', maxWidth: '95vw' }}
         header="Detalle de Factura Oficial"
         modal
+        blockScroll
+        draggable={false}
+        resizable={false}
         onHide={() => setTicketDialogVisible(false)}
         footer={
           <div className="flex justify-content-between align-items-center w-full">

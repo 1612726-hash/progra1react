@@ -114,7 +114,6 @@ export const LoginPage = () => {
             <PacmanSprite size={52} />
           </div>
           <h1 className="arcade-title">VIDEO CLUB</h1>
-          <div className="arcade-subtitle">FRUTIGER AERO PROFESSIONAL</div>
           <p
             className="m-0 mt-1 text-xs"
             style={{ color: '#64748b', fontWeight: 500 }}

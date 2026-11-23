@@ -9,6 +9,11 @@ export const productoService = {
     return apiClient.get(BASE, { params }).then(r => r.data);
   },
 
+  /** GET /api/productos/paginado?page=0&size=10&categoriaId=...&search=...&sortField=...&sortDirection=... */
+  getPaginated: (params = {}) => {
+    return apiClient.get(`${BASE}/paginado`, { params }).then(r => r.data);
+  },
+
   /** GET /api/productos/:id */
   getById: (id) => apiClient.get(`${BASE}/${id}`).then(r => r.data),
 

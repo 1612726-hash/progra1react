@@ -164,9 +164,12 @@ export const CategoriasPage = () => {
 
       <Dialog
         visible={dialogVisible}
-        style={{ width: '450px' }}
+        style={{ width: '450px', maxWidth: '95vw' }}
         header={isEditing ? 'Editar Categoría' : 'Nueva Categoría'}
         modal
+        blockScroll
+        draggable={false}
+        resizable={false}
         onHide={hideDialog}
         footer={dialogFooter}
       >

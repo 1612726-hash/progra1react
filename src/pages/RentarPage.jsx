@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { Card } from 'primereact/card';
 import { Button } from 'primereact/button';
 import { Dropdown } from 'primereact/dropdown';
@@ -6,6 +6,7 @@ import { InputText } from 'primereact/inputtext';
 import { Tag } from 'primereact/tag';
 import { Toast } from 'primereact/toast';
 import { Dialog } from 'primereact/dialog';
+import { Paginator } from 'primereact/paginator';
 import { productoService } from '../services/productoService';
 import { categoriaService } from '../services/categoriaService';
 import { clienteService } from '../services/clienteService';
@@ -13,56 +14,135 @@ import { retroAudio } from '../utils/retroSound';
 import { PacmanSprite, GhostSprite, CartridgeSprite } from '../components/RetroSprites';
 
 export const RentarPage = () => {
-  const [productos, setProductos] = useState([]);
+  // Catálogos auxiliares (se cargan una sola vez)
   const [categorias, setCategorias] = useState([]);
   const [clientes, setClientes] = useState([]);
+
+  // Lista paginada de productos y estado de carga
+  const [productos, setProductos] = useState([]);
   const [loading, setLoading] = useState(true);
 
   // Filtros
   const [selectedCat, setSelectedCat] = useState(null);
+  const [searchInput, setSearchInput] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
+
+  // Paginación real (Server-side)
+  const [first, setFirst] = useState(0);
+  const [page, setPage] = useState(0);
+  const [rows, setRows] = useState(12);
+  const [totalRecords, setTotalRecords] = useState(0);
 
   // Modal de Renta
   const [rentDialogVisible, setRentDialogVisible] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [selectedCliente, setSelectedCliente] = useState(null);
   const [diasRenta, setDiasRenta] = useState(1);
+  const [submittingRent, setSubmittingRent] = useState(false);
 
   const toastRef = useRef(null);
 
-  const loadData = async () => {
+  // ── Cargar catálogos fijos (categorías y clientes) una sola vez ────────────
+  useEffect(() => {
+    let isMounted = true;
+    const loadCatalogos = async () => {
+      try {
+        const [catRes, cliRes] = await Promise.all([
+          categoriaService.getAll(),
+          clienteService.getAll(),
+        ]);
+        if (isMounted) {
+          const catData = Array.isArray(catRes) ? catRes : catRes?.content || [];
+          const cliData = Array.isArray(cliRes) ? cliRes : cliRes?.content || [];
+          setCategorias(catData);
+          setClientes(cliData);
+        }
+      } catch (err) {
+        console.error('Error al cargar catálogos:', err);
+      }
+    };
+
+    loadCatalogos();
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  // ── Debounce para la búsqueda de texto ──────────────────────────────────────
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (searchInput !== searchQuery) {
+        setSearchQuery(searchInput);
+        setPage(0);
+        setFirst(0);
+      }
+    }, 350);
+
+    return () => clearTimeout(timer);
+  }, [searchInput, searchQuery]);
+
+  // ── Carga paginada desde el servidor ─────────────────────────────────────────
+  const fetchProductosPaginados = useCallback(async () => {
     try {
       setLoading(true);
-      const [prodRes, catRes, cliRes] = await Promise.all([
-        productoService.getAll(),
-        categoriaService.getAll(),
-        clienteService.getAll(),
-      ]);
+      const params = {
+        page: page,
+        size: rows,
+        sortField: 'idProducto',
+        sortDirection: 'asc',
+      };
 
-      const prodData = Array.isArray(prodRes) ? prodRes : prodRes?.content || [];
-      const catData = Array.isArray(catRes) ? catRes : catRes?.content || [];
-      const cliData = Array.isArray(cliRes) ? cliRes : cliRes?.content || [];
+      if (selectedCat) {
+        params.categoriaId = selectedCat;
+      }
 
-      setProductos(prodData);
-      setCategorias(catData);
-      setClientes(cliData);
-    } catch {
+      if (searchQuery && searchQuery.trim()) {
+        params.search = searchQuery.trim();
+      }
+
+      const res = await productoService.getPaginated(params);
+
+      if (res && res.content) {
+        setProductos(res.content);
+        setTotalRecords(res.totalElements ?? 0);
+      } else if (Array.isArray(res)) {
+        setProductos(res);
+        setTotalRecords(res.length);
+      } else {
+        setProductos([]);
+        setTotalRecords(0);
+      }
+    } catch (err) {
+      console.error('Error al obtener productos paginados:', err);
       toastRef.current?.show({
         severity: 'error',
         summary: 'Error',
-        detail: 'No se pudieron cargar los datos de alquiler',
+        detail: 'No se pudieron cargar los títulos de alquiler',
+        life: 3000,
       });
+      setProductos([]);
+      setTotalRecords(0);
     } finally {
       setLoading(false);
     }
-  };
+  }, [page, rows, selectedCat, searchQuery]);
 
   useEffect(() => {
-    loadData();
-  }, []);
+    fetchProductosPaginados();
+  }, [fetchProductosPaginados]);
 
+  // ── Manejo de cambio de página en el Paginator ──────────────────────────────
+  const onPageChange = (e) => {
+    retroAudio.playCoin();
+    setFirst(e.first);
+    setRows(e.rows);
+    setPage(e.page);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  // ── Tarifas y Cálculos ───────────────────────────────────────────────────────
   const getTarifaDia = (prod) => {
-    const base = Number(prod.precio || 20);
+    const base = Number(prod?.precio || 20);
     return Math.max(1.0, +(base * 0.08).toFixed(2));
   };
 
@@ -76,6 +156,7 @@ export const RentarPage = () => {
     return Math.round(total * 100) / 100;
   };
 
+  // ── Acciones de Modal de Renta ──────────────────────────────────────────────
   const handleOpenRent = (prod) => {
     retroAudio.playCoin();
     setSelectedProduct(prod);
@@ -88,9 +169,14 @@ export const RentarPage = () => {
     if (!selectedProduct) return;
 
     try {
-      await productoService.update(selectedProduct.id || selectedProduct.idProducto, {
+      setSubmittingRent(true);
+      const prodId = selectedProduct.id || selectedProduct.idProducto;
+      const currentStock = selectedProduct.existencia ?? selectedProduct.stock ?? 1;
+
+      await productoService.update(prodId, {
         ...selectedProduct,
-        existencia: Math.max(0, (selectedProduct.existencia ?? selectedProduct.stock ?? 1) - 1),
+        existencia: Math.max(0, currentStock - 1),
+        stock: Math.max(0, currentStock - 1),
       });
 
       retroAudio.playVictory();
@@ -103,32 +189,28 @@ export const RentarPage = () => {
       });
 
       setRentDialogVisible(false);
-      loadData();
-    } catch {
+      // Recargar únicamente la página actual en el servidor
+      fetchProductosPaginados();
+    } catch (err) {
+      console.error('Error al confirmar renta:', err);
       toastRef.current?.show({
         severity: 'error',
         summary: 'Error',
         detail: 'No se pudo procesar la renta',
       });
+    } finally {
+      setSubmittingRent(false);
     }
   };
 
-  const filteredProductos = productos.filter((prod) => {
-    const matchesCat = selectedCat ? prod.categoria?.id === selectedCat : true;
-    const matchesQuery = searchQuery
-      ? prod.nombre?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        prod.codigo?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        prod.categoria?.nombre?.toLowerCase().includes(searchQuery.toLowerCase())
-      : true;
-    return matchesCat && matchesQuery;
-  });
+  const totalPages = Math.ceil(totalRecords / rows) || 1;
 
   return (
     <div className="flex flex-column gap-4">
       <Toast ref={toastRef} position="top-right" />
 
       {/* Encabezado Aero Glass Ribbon */}
-      <div className="surface-card border-round-2xl p-4 flex flex-column md:flex-row md:align-items-center justify-content-between gap-3">
+      <div className="surface-card border-round-2xl p-4 flex flex-column md:flex-row md:align-items-center justify-content-between gap-3 shadow-1">
         <div className="flex align-items-center gap-3">
           <PacmanSprite size={44} />
           <div>
@@ -158,8 +240,8 @@ export const RentarPage = () => {
         </div>
       </div>
 
-      {/* Barra de Filtros */}
-      <div className="surface-card border-round-2xl p-3 flex flex-column gap-3">
+      {/* Barra de Filtros y Búsqueda */}
+      <div className="surface-card border-round-2xl p-3 flex flex-column gap-3 shadow-1">
         <div className="flex flex-wrap justify-content-between align-items-center gap-3">
           <div className="flex align-items-center gap-2 flex-wrap">
             <Dropdown
@@ -171,6 +253,8 @@ export const RentarPage = () => {
               onChange={(e) => {
                 retroAudio.playCoin();
                 setSelectedCat(e.value);
+                setPage(0);
+                setFirst(0);
               }}
               placeholder="Filtrar por consola"
               className="w-16rem"
@@ -180,19 +264,41 @@ export const RentarPage = () => {
               <i className="pi pi-search" />
               <InputText
                 placeholder="Buscar por juego, código o consola..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
+                value={searchInput}
+                onChange={(e) => setSearchInput(e.target.value)}
                 className="w-20rem"
               />
             </span>
+
+            {searchInput && (
+              <Button
+                icon="pi pi-times"
+                className="p-button-rounded p-button-text p-button-secondary"
+                tooltip="Limpiar búsqueda"
+                onClick={() => {
+                  setSearchInput('');
+                  setSearchQuery('');
+                  setPage(0);
+                  setFirst(0);
+                }}
+              />
+            )}
           </div>
 
-          <div style={{ fontSize: '0.9rem', color: '#0369a1', fontWeight: 600 }}>
-            Títulos para Renta: <strong>{filteredProductos.length}</strong>
+          <div className="flex align-items-center gap-3">
+            <div style={{ fontSize: '0.9rem', color: '#0369a1', fontWeight: 600 }}>
+              Títulos para Renta: <strong>{totalRecords}</strong>
+            </div>
+            <div
+              className="px-2 py-1 border-round text-xs font-bold"
+              style={{ background: '#e0f2fe', color: '#0284c7' }}
+            >
+              Página {page + 1} de {totalPages}
+            </div>
           </div>
         </div>
 
-        {/* Botones de consolas */}
+        {/* Botones de consolas destacadas */}
         <div className="flex align-items-center gap-2 flex-wrap pt-2 border-top-1 surface-border">
           <span className="mr-2 text-xs font-bold" style={{ color: '#64748b' }}>
             CONSOLAS DESTACADAS:
@@ -201,12 +307,15 @@ export const RentarPage = () => {
             label="Todas"
             icon="pi pi-th-large"
             size="small"
-            outlined={selectedCat !== null || searchQuery !== ''}
+            outlined={selectedCat !== null || searchInput !== ''}
             severity="secondary"
             onClick={() => {
               retroAudio.playCoin();
               setSelectedCat(null);
+              setSearchInput('');
               setSearchQuery('');
+              setPage(0);
+              setFirst(0);
             }}
           />
           {['Super Nintendo', 'Sega Genesis', 'Arcade'].map((consolaNombre) => {
@@ -215,7 +324,7 @@ export const RentarPage = () => {
             );
             const isSelected =
               (catObj && selectedCat === catObj.id) ||
-              searchQuery.toLowerCase() === consolaNombre.toLowerCase();
+              searchInput.toLowerCase() === consolaNombre.toLowerCase();
 
             return (
               <Button
@@ -227,9 +336,15 @@ export const RentarPage = () => {
                   retroAudio.playCoin();
                   if (catObj) {
                     setSelectedCat(catObj.id);
+                    setSearchInput('');
+                    setSearchQuery('');
                   } else {
+                    setSelectedCat(null);
+                    setSearchInput(consolaNombre);
                     setSearchQuery(consolaNombre);
                   }
+                  setPage(0);
+                  setFirst(0);
                 }}
               />
             );
@@ -237,31 +352,44 @@ export const RentarPage = () => {
         </div>
       </div>
 
-      {/* Grid de Cartuchos para Renta */}
+      {/* Grid de Cartuchos para Renta con Paginación Real */}
       <div className="grid">
         {loading ? (
-          <div className="col-12 text-center p-5">
-            <i className="pi pi-spin pi-spinner text-3xl" style={{ color: '#0284c7' }} />
-            <p className="text-sm mt-2 font-medium" style={{ color: '#64748b' }}>
-              Cargando títulos en renta...
+          <div className="col-12 text-center p-6 surface-card border-round-2xl shadow-1">
+            <i className="pi pi-spin pi-spinner text-4xl" style={{ color: '#0284c7' }} />
+            <p className="text-base mt-3 font-semibold" style={{ color: '#0369a1' }}>
+              Cargando títulos en renta del servidor...
             </p>
           </div>
-        ) : filteredProductos.length === 0 ? (
-          <div className="col-12 text-center p-5 surface-card border-round-2xl">
-            <span style={{ fontSize: '2.5rem' }}>🕹️</span>
-            <p className="font-bold text-base mt-2" style={{ color: '#0284c7' }}>
-              No hay títulos disponibles para renta en esta categoría.
+        ) : productos.length === 0 ? (
+          <div className="col-12 text-center p-6 surface-card border-round-2xl shadow-1">
+            <span style={{ fontSize: '3rem' }}>🕹️</span>
+            <p className="font-bold text-lg mt-3" style={{ color: '#0284c7' }}>
+              No se encontraron títulos disponibles para los criterios seleccionados.
             </p>
+            <Button
+              label="Ver todos los títulos"
+              icon="pi pi-refresh"
+              size="small"
+              className="mt-2"
+              onClick={() => {
+                setSelectedCat(null);
+                setSearchInput('');
+                setSearchQuery('');
+                setPage(0);
+                setFirst(0);
+              }}
+            />
           </div>
         ) : (
-          filteredProductos.map((prod) => {
+          productos.map((prod) => {
             const stock = prod.existencia ?? prod.stock ?? 0;
             const tarifaDia = getTarifaDia(prod);
             const isOutOfStock = stock <= 0;
 
             return (
               <div key={prod.id || prod.idProducto} className="col-12 sm:col-6 lg:col-4 xl:col-3">
-                <Card className="h-full flex flex-column justify-content-between border-round-2xl transition-transform transition-duration-150 hover:scale-102">
+                <Card className="h-full flex flex-column justify-content-between border-round-2xl transition-transform transition-duration-150 hover:scale-102 shadow-1">
                   <div className="text-center mb-3">
                     <CartridgeSprite size={65} color="#06b6d4" />
                     <h3
@@ -315,24 +443,44 @@ export const RentarPage = () => {
         )}
       </div>
 
+      {/* Paginador Servidor PrimeReact */}
+      {totalRecords > 0 && (
+        <div className="surface-card border-round-2xl shadow-1 p-2">
+          <Paginator
+            first={first}
+            rows={rows}
+            totalRecords={totalRecords}
+            rowsPerPageOptions={[8, 12, 16, 24, 48]}
+            onPageChange={onPageChange}
+            template="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown CurrentPageReport"
+            currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} títulos"
+          />
+        </div>
+      )}
+
       {/* Diálogo de Confirmación de Renta */}
       <Dialog
         visible={rentDialogVisible}
-        style={{ width: '500px' }}
+        style={{ width: '520px', maxWidth: '95vw' }}
         header="Registro de Alquiler de Cartucho"
         modal
-        onHide={() => setRentDialogVisible(false)}
+        blockScroll
+        draggable={false}
+        resizable={false}
+        onHide={() => !submittingRent && setRentDialogVisible(false)}
         footer={
           <div className="flex justify-content-end gap-2">
             <Button
               label="Cancelar"
               icon="pi pi-times"
               text
+              disabled={submittingRent}
               onClick={() => setRentDialogVisible(false)}
             />
             <Button
-              label="Autorizar Renta"
-              icon="pi pi-check"
+              label={submittingRent ? 'Procesando...' : 'Autorizar Renta'}
+              icon={submittingRent ? 'pi pi-spin pi-spinner' : 'pi pi-check'}
+              disabled={submittingRent}
               onClick={handleConfirmRent}
             />
           </div>
@@ -371,6 +519,9 @@ export const RentarPage = () => {
                 onChange={(e) => setSelectedCliente(e.value)}
                 placeholder="Seleccionar socio registrado"
                 className="w-full"
+                filter
+                filterPlaceholder="Buscar socio por nombre o documento..."
+                scrollHeight="200px"
               />
             </div>
 
